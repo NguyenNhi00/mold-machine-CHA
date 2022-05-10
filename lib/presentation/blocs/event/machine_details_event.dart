@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/mold.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
+import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
 
@@ -20,10 +21,10 @@ class MachineDetailsEventHubConnected extends MachineEvent {
 
 class MachineDetailsEventDataUpDated extends MachineEvent {
   DateTime timestamp;
-  NodeQuery nodeQuery;
+  NodeQueryResult nodeQueryResult;
   MachineDetailsEventDataUpDated(
       {required this.timestamp,
-      required this.nodeQuery,
+      required this.nodeQueryResult,
       });
   @override
   List<Object> get props => [timestamp];

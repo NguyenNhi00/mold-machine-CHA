@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
+import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_details_bloc.dart';
@@ -22,7 +23,8 @@ class DeviceQueryResultView extends StatefulWidget {
 class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
   late HubConnection hubConnection;
   List<DeviceQueryResult> connectedDeviceQueryResult = [];
-  NodeQueryResult nodeQueryResult = NodeQueryResult('eonNodeId', false, []);
+  NodeQueryResult nodeQueryResult = const NodeQueryResult(
+      connected: false, deviceQueryResults: [], eonNodeId: '');
   String deviceId = ''; // ma may
   String data1 = "null"; // ma san pham
   String data2 = "null"; // so luong ke hoach
@@ -45,24 +47,27 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
         'L6.SetCycle',
         'L6.MachineStatus'
       ];
-      DeviceQuery deviceQuery =
-          DeviceQuery(deviceId: 'l6', tagNames: tagQuery);
+      DeviceQuery deviceQuery = DeviceQuery(deviceId: 'l6', tagNames: tagQuery);
       List<DeviceQuery> deviceQueries = [deviceQuery];
-      NodeQuery nodeQuery =  NodeQuery(eonNodeId: 'imm', deviceQueries: deviceQueries);
+      NodeQuery nodeQuery =
+          NodeQuery(eonNodeId: 'imm', deviceQueries: deviceQueries);
       List deviceQueryJsons = [];
-      for(int i = 0; i< deviceQueries.length; i++){
-        Map<String,dynamic> deviceQueryJson = {
+      // toJson
+      for (int i = 0; i < deviceQueries.length; i++) {
+        Map<String, dynamic> deviceQueryJson = {
           'DeviceId': deviceQueries[i].deviceId,
           'Tagnames': tagQuery,
         };
         deviceQueryJsons.add(deviceQueryJson);
       }
-      Map<String,dynamic> nodeQueryjson = {
-        'EonNodeId':'imm',
-        'DeviceQueries':deviceQueryJsons
+      Map<String, dynamic> nodeQueryjson = {
+        'EonNodeId': 'imm',
+        'DeviceQueries': deviceQueryJsons
       };
       String json = jsonEncode(nodeQueryjson);
       print(json);
+
+      // connect to server
       hubConnection = HubConnectionBuilder()
           .withUrl(Constants.signalRUrl)
           .withAutomaticReconnect()
@@ -72,20 +77,29 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
       hubConnection.onclose((error) => print("Connection Closed"));
       hubConnection.start()!.then((nodeQueryResultSignalR) async {
         if (hubConnection.state == HubConnectionState.connected) {
-          final nodeQueryResultSignalR = await hubConnection
-              .invoke("GetListTags", args: <Object> [json]);
-          nodeQueryResult = nodeQueryResultSignalR;
-          print(nodeQueryResultSignalR);
+          final nodeQueryResultSignalR =
+              await hubConnection.invoke("GetListTags", args: <Object>[json]);
+          dynamic data = jsonDecode(nodeQueryResultSignalR);
+          NodeQueryResultModel nodeQueryResultFromJson =
+              NodeQueryResultModel.fromJson(data);
+          nodeQueryResult = nodeQueryResultFromJson;
+          print(nodeQueryResult);
         }
       });
-      for(int i = 0; i < nodeQueryResult.deviceQueryResults.length; i++){
-        if(nodeQueryResult.deviceQueryResults[i].tagQueryResults[4].value == 1 
-        || nodeQueryResult.deviceQueryResults[i].tagQueryResults[4].value == 2
-        || nodeQueryResult.deviceQueryResults[i].tagQueryResults[4].value == 3
-        ){
+      for (int i = 0; i < nodeQueryResult.deviceQueryResults.length; i++) {
+        if (nodeQueryResult
+                    .deviceQueryResults[i].tagQueryResults[4].value ==
+                1 ||
+            nodeQueryResult.deviceQueryResults[i].tagQueryResults[4].value ==
+                2 ||
+            nodeQueryResult.deviceQueryResults[i].tagQueryResults[4].value ==
+                3) {
           connectedDeviceQueryResult.add(nodeQueryResult.deviceQueryResults[i]);
         }
       }
+      BlocProvider.of<MachineDetailsBloc>(context).add(
+          MachineDetailsEventDataUpDated(
+              timestamp: DateTime.now(), nodeQueryResult: nodeQueryResult));
     } on TimeoutException {
       BlocProvider.of<MachineDetailsBloc>(context).add(
           MachineDetailsEventConnectFail(
@@ -224,33 +238,7 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
           body: BlocConsumer<MachineDetailsBloc, MachineDetailsState>(
               listener: (context, machineDetailsState) async {
             if (machineDetailsState is MachineDetailsStateConnectSuccessful) {
-            } else if (machineDetailsState is MachineDetailsStateDataUpdated) {
-              data4 = machineDetailsState
-                  .nodeQuery
-                  .deviceQueries[Global.machineindex]
-                  .tagNames[Global.machineindex][0]
-                  .toString();
-              data5 = machineDetailsState
-                  .nodeQuery
-                  .deviceQueries[Global.machineindex]
-                  .tagNames[Global.machineindex][1]
-                  .toString();
-              data6 = machineDetailsState
-                  .nodeQuery
-                  .deviceQueries[Global.machineindex]
-                  .tagNames[Global.machineindex][2]
-                  .toString();
-              data7 = machineDetailsState
-                  .nodeQuery
-                  .deviceQueries[Global.machineindex]
-                  .tagNames[Global.machineindex][3]
-                  .toString();
-              data8 = machineDetailsState
-                  .nodeQuery
-                  .deviceQueries[Global.machineindex]
-                  .tagNames[Global.machineindex][4]
-                  .toString();
-            }
+            } else if (machineDetailsState is MachineDetailsStateDataUpdated) {}
           }, builder: (context, machineDetailState) {
             if (machineDetailState is MachineDetailsStateDataUpdated) {
               return TabBarView(
@@ -265,7 +253,9 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                            Text(nodeQueryResult.deviceQueryResults[index].deviceId.toString()),
+                          Text(nodeQueryResult
+                              .deviceQueryResults[index].deviceId
+                              .toString()),
                           Expanded(
                             child: GestureDetector(
                               child: Image(
@@ -274,7 +264,8 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                                 width: SizeConfig.screenWidth * 0.3650,
                               ),
                               onTap: () {
-                                 Global.deviceQueryResult = nodeQueryResult.deviceQueryResults[index];
+                                Global.deviceQueryResult =
+                                    nodeQueryResult.deviceQueryResults[index];
                                 Navigator.pushNamed(
                                     context, '/MachineDetailsScreen');
                               },
@@ -284,26 +275,30 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                bool.fromEnvironment(
-                                        nodeQueryResult.deviceQueryResults[index].connected.toString())
+                                bool.fromEnvironment(nodeQueryResult
+                                        .deviceQueryResults[index].connected
+                                        .toString())
                                     ? Icons.check_box_rounded
                                     : Icons.check_box_outline_blank_rounded,
-                                color: bool.fromEnvironment(
-                                        nodeQueryResult.deviceQueryResults[index].connected.toString())
+                                color: bool.fromEnvironment(nodeQueryResult
+                                        .deviceQueryResults[index].connected
+                                        .toString())
                                     ? Colors.green
                                     : Colors.red,
                                 size: 20,
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                bool.fromEnvironment(
-                                        nodeQueryResult.deviceQueryResults[index].connected.toString())
+                                bool.fromEnvironment(nodeQueryResult
+                                        .deviceQueryResults[index].connected
+                                        .toString())
                                     ? "Đang kết nối"
                                     : "Ngắt kết nối",
                                 style: TextStyle(
                                     fontSize: 20,
-                                    color: bool.fromEnvironment(
-                                            nodeQueryResult.deviceQueryResults[index].connected.toString())
+                                    color: bool.fromEnvironment(nodeQueryResult
+                                            .deviceQueryResults[index].connected
+                                            .toString())
                                         ? Colors.green
                                         : Colors.red),
                               ),
@@ -325,7 +320,9 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          Text(connectedDeviceQueryResult[index].deviceId.toString()),
+                          Text(connectedDeviceQueryResult[index]
+                              .deviceId
+                              .toString()),
                           Expanded(
                             child: GestureDetector(
                               child: Image(
@@ -336,7 +333,7 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => MachineDetailsScreen(
-                                       connectedDeviceQueryResult[index])));
+                                        connectedDeviceQueryResult[index])));
                               },
                             ),
                           ),
@@ -344,24 +341,34 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                bool.fromEnvironment(connectedDeviceQueryResult[index].connected.toString())
+                                bool.fromEnvironment(
+                                        connectedDeviceQueryResult[index]
+                                            .connected
+                                            .toString())
                                     ? Icons.check_box_rounded
                                     : Icons.check_box_outline_blank_rounded,
                                 color: bool.fromEnvironment(
-                                        connectedDeviceQueryResult[index].connected.toString())
+                                        connectedDeviceQueryResult[index]
+                                            .connected
+                                            .toString())
                                     ? Colors.green
                                     : Colors.red,
                                 size: 20,
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                bool.fromEnvironment(connectedDeviceQueryResult[index].connected.toString())
+                                bool.fromEnvironment(
+                                        connectedDeviceQueryResult[index]
+                                            .connected
+                                            .toString())
                                     ? "Đang kết nối"
                                     : "Ngắt kết nối",
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: bool.fromEnvironment(
-                                            connectedDeviceQueryResult[index].connected.toString())
+                                            connectedDeviceQueryResult[index]
+                                                .connected
+                                                .toString())
                                         ? Colors.green
                                         : Colors.red),
                               ),

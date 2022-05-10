@@ -5,6 +5,7 @@ import 'package:injection_molding_machine_application/domain/entities/configurat
 import 'package:injection_molding_machine_application/domain/entities/mold.dart';
 import 'package:injection_molding_machine_application/domain/entities/mold_monitor.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
+import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import '../../../data/models/mold_monitor_model.dart';
 
 abstract class MachineDetailsState extends Equatable {}
@@ -71,10 +72,10 @@ class MachineDetailsStateConnectFail extends MachineDetailsState {
 }
 
 class MachineDetailsStateDataUpdated extends MachineDetailsState {
-  NodeQuery nodeQuery;
+  NodeQueryResult nodeQueryResult;
   DateTime timestamp;
   MachineDetailsStateDataUpdated({
-    required this.nodeQuery,
+    required this.nodeQueryResult,
     required this.timestamp,
   });
   @override

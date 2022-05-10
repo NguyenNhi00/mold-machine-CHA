@@ -11,7 +11,7 @@ import 'package:injection_molding_machine_application/presentation/views/mode_sc
 import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 
 class AppRouter {
-  static NodeQueryResult nodeQueryResult = NodeQueryResult('', false, []);
+  static NodeQueryResult nodeQueryResult = const NodeQueryResult(connected:false, deviceQueryResults: [], eonNodeId: '');
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':

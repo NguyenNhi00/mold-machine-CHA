@@ -11,6 +11,7 @@ class TagQueryResult extends Equatable {
 
   @override
   List<Object> get props => [tagName, value];
+ 
 }
 
 class DeviceQueryResult extends Equatable {
@@ -34,11 +35,11 @@ class NodeQueryResult extends Equatable {
   final bool connected;
   final List<DeviceQueryResult> deviceQueryResults;
 
-  NodeQueryResult(
-    this.eonNodeId,
-    this.connected,
-    this.deviceQueryResults,
-  );
+ const NodeQueryResult({
+   required this.eonNodeId,
+   required this.connected,
+   required this.deviceQueryResults,
+});
 
   @override
   List<Object> get props =>

@@ -8,7 +8,7 @@ class AllModeScreen extends StatefulWidget {
   _AllModeScreenState createState() => _AllModeScreenState();
 }
 class _AllModeScreenState extends State<AllModeScreen> {
-   NodeQueryResult nodeQueryResult = NodeQueryResult('', false, []);
+   NodeQueryResult nodeQueryResult = const NodeQueryResult(connected: false, deviceQueryResults: [], eonNodeId: '');
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
