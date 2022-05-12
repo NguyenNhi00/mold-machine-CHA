@@ -13,11 +13,12 @@ class MachineManagementStateUnLoad extends MachineManagementState {}
 class MachineManagementStateLoading extends MachineManagementState {}
 
 class MachineManagementStateLoaded extends MachineManagementState {
+  List<Machine> machines ;
   List<Product> productList;
   List<DeviceQueryResult> deviceQueryResult;
-  MachineManagementStateLoaded(this.deviceQueryResult, this.productList);
+  MachineManagementStateLoaded(this.machines,this.deviceQueryResult, this.productList);
   @override
-  List<Object?> get props => [deviceQueryResult];
+  List<Object?> get props => [deviceQueryResult, machines,productList];
 }
 
 class MachineManagementStateLoadFail extends MachineManagementState {}

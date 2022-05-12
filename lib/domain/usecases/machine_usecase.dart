@@ -8,9 +8,13 @@ class GetMachineUseCase {
   final ModifyStatusMachineRepository _modifyStatusMachineRepository;
   GetMachineUseCase(
       this._machineRepository, this._modifyStatusMachineRepository);
-  Future<List<Product>> getMachineDetails() async {
-    final product = await _machineRepository.getMachineDetail();
+  Future<List<Product>> getProductDetail() async {
+    final product = await _machineRepository.getProductDetail();
     return product;
+  }
+  Future<List<Machine>> getmachinesData() async{
+    final machines = await _machineRepository.getMachinesData();
+    return machines;
   }
 
   Future<void> modifyStatusMachine() async {

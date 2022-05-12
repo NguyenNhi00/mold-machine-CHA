@@ -15,9 +15,11 @@ class MachinesManagementBloc
   Future<void> onFetchDetailMachines(MachinesManagementEvent event,
       Emitter<MachineManagementState> emit) async {
     if (event is FetchDetailMachinesEvent) {
-      final res = await _getMachineUseCase.getMachineDetails();
+      final res = await _getMachineUseCase.getProductDetail();
       final product = res;
-      return emit(MachineManagementStateLoaded([], product ));
+      final response = await _getMachineUseCase.getmachinesData();
+      final machines = response;
+      return emit(MachineManagementStateLoaded( machines,[],product));
     }
   }
 }

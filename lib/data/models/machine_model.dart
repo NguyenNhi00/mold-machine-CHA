@@ -6,7 +6,7 @@ class MachineModel extends Machine{
   const MachineModel({String? id,
   EmachineType? machineType,
    String? model,});
-   factory MachineModel.fromJon(Map<String,dynamic> json){
+   factory MachineModel.fromJson(Map<String,dynamic> json){
      return MachineModel(
        id: json['id'] as String,
        machineType: json[' machineType'] as EmachineType,

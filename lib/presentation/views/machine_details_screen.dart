@@ -10,8 +10,6 @@ import 'package:injection_molding_machine_application/presentation/blocs/state/m
 import 'package:injection_molding_machine_application/presentation/views/models/operating_params_reliability.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/mold_params_reliability.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
 import '../../data/models/error_package.dart';
 import '../blocs/bloc/machine_details_bloc.dart';
 import '../blocs/event/machine_details_event.dart';
@@ -33,49 +31,12 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
   //final _channel = WebSocketChannel.connect(Uri.parse(Constants.signalRUrl));
   late HubConnection hubConnection;
   List<Product> productList = [];
+  List<Machine> machineList = [];
+  Machine machine = Machine();
   Product product = Product();
   @override
   void initState() {
     super.initState();
-    try {
-      hubConnection = HubConnectionBuilder()
-          .withUrl(Constants.signalRUrl)
-          .withAutomaticReconnect()
-          .build();
-      hubConnection.keepAliveIntervalInMilliseconds = 10000;
-      hubConnection.serverTimeoutInMilliseconds = 10000;
-      hubConnection.onclose((error) {
-        return error != null
-            ? BlocProvider.of<MachineDetailsBloc>(context).add(
-                MachineDetailsEventConnectFail(
-                    errorPackage: ErrorPackage(
-                        errorCode: "error",
-                        message: "Ngắt kết nối",
-                        detail: "Đã ngắt kết nối đến máy chủ!")))
-            : null;
-      });
-    } on TimeoutException {
-      BlocProvider.of<MachineDetailsBloc>(context).add(
-          MachineDetailsEventConnectFail(
-              errorPackage: ErrorPackage(
-                  errorCode: "erro",
-                  message: "Không tìm thấy máy chủ",
-                  detail: "Vui lòng kiểm tra đường truyền!")));
-    } on SocketException {
-      BlocProvider.of<MachineDetailsBloc>(context).add(
-          MachineDetailsEventConnectFail(
-              errorPackage: ErrorPackage(
-                  errorCode: "erro",
-                  message: "Không tìm thấy máy chủ",
-                  detail: "Vui lòng kiểm tra đường truyền!")));
-    } catch (e) {
-      BlocProvider.of<MachineDetailsBloc>(context).add(
-          MachineDetailsEventConnectFail(
-              errorPackage: ErrorPackage(
-                  errorCode: "error",
-                  message: "Lỗi xảy ra",
-                  detail: e.toString())));
-    }
   }
 
   @override
@@ -185,8 +146,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
             if (state is MachineManagementStateLoaded) {
               productList = state.productList;
               for (int i = 0; i < productList.length; i++) {
-                if (productList[i].machine!.id ==
-                    deviceQueryResult.deviceId) {
+                if (productList[i].machine!.id == deviceQueryResult.deviceId) {
                   product = configuration[i].product!;
                 }
               }

@@ -22,7 +22,7 @@ class ConfigurationModel extends Configuration {
   factory ConfigurationModel.fromJson(Map<String, dynamic> json) {
     return ConfigurationModel(
       product: json["product"] != null? ProductModel.fromJson(json['product']): null,
-      machine: json["machine"] != null? MachineModel.fromJon(json['machine']): null,
+      machine: json["machine"] != null? MachineModel.fromJson(json['machine']): null,
       injectionCycle: json["injectionCycle"],
       quanlity: json["quanlity"],
       productionDate: json["productionDate"] ,
