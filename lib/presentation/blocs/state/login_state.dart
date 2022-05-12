@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:injection_molding_machine_application/domain/entities/login.dart';
 
 class LoginState extends Equatable {
   @override
@@ -39,9 +40,10 @@ class LoginStateLoadingRequest extends LoginState {
 }
 
 class LoginStateLoginSuccessful extends LoginState {
-  LoginStateLoginSuccessful();
+  final User user;
+  LoginStateLoginSuccessful(this.user);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [user];
 }
 
 class LoginStateLoginFailure extends LoginState {

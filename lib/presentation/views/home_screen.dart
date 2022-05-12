@@ -3,18 +3,24 @@ import 'package:injection_molding_machine_application/domain/entities/node_query
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import '../widgets/widgets.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/main_app_name.dart';
+
 class AllModeScreen extends StatefulWidget {
   @override
   _AllModeScreenState createState() => _AllModeScreenState();
 }
+
 class _AllModeScreenState extends State<AllModeScreen> {
-   NodeQueryResult nodeQueryResult = const NodeQueryResult(connected: false, deviceQueryResults: [], eonNodeId: '');
+  NodeQueryResult nodeQueryResult =
+      NodeQueryResult(connected: false, deviceQueryResults: [], eonNodeId: '');
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Quản lý máy ép"),
+        title: const Text(
+          "QUẢN LÝ MÁY ÉP",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Constants.mainColor,
       ),
       backgroundColor: Colors.white,
@@ -33,7 +39,7 @@ class _AllModeScreenState extends State<AllModeScreen> {
               padding: 70,
               height: SizeConfig.screenHeight * 0.07121,
               onPressed: () {
-               Navigator.pushNamed(context, '/DeviceQueryResultView');
+                Navigator.pushNamed(context, 'two');
               },
             ),
             SizedBox(height: SizeConfig.screenHeight * 0.0028),

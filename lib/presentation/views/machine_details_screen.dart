@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
-import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_management_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machines_management_event.dart';
@@ -31,19 +30,9 @@ class MachineDetailsScreen extends StatefulWidget {
 class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
   DeviceQueryResult deviceQueryResult;
   _MachineDetailsScreenState(this.deviceQueryResult);
-  String data1 = "null";
-  String data2 = "null";
-  String data3 = "null";
-  String data4 = "null";
-  String data5 = "null";
-  String data6 = "null";
-  String data7 = "null";
-  String data8 = "null";
-  bool warning = false;
-  bool running = false;
-  final _channel = WebSocketChannel.connect(Uri.parse(Constants.signalRUrl));
+  //final _channel = WebSocketChannel.connect(Uri.parse(Constants.signalRUrl));
   late HubConnection hubConnection;
-  List<Configuration> configuration = [];
+  List<Product> productList = [];
   Product product = Product();
   @override
   void initState() {
@@ -65,7 +54,6 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                         detail: "Đã ngắt kết nối đến máy chủ!")))
             : null;
       });
-      hubConnection.on("machineDetailsHandlers", machineDetailsHandlers);
     } on TimeoutException {
       BlocProvider.of<MachineDetailsBloc>(context).add(
           MachineDetailsEventConnectFail(
@@ -195,7 +183,13 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
         body: BlocConsumer<MachinesManagementBloc, MachineManagementState>(
           listener: (context, MachineManagementState state) {
             if (state is MachineManagementStateLoaded) {
-              product = state.product;
+              productList = state.productList;
+              for (int i = 0; i < productList.length; i++) {
+                if (productList[i].machine!.id ==
+                    deviceQueryResult.deviceId) {
+                  product = configuration[i].product!;
+                }
+              }
               print('information: $product');
             }
           },
@@ -227,11 +221,13 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                               height: SizeConfig.screenHeight * 0.07121,
                               onPressed: () {
                                 bool disconnectMachine = bool.fromEnvironment(
-                                    deviceQueryResult.connected.toString()) ==
+                                        deviceQueryResult.connected
+                                            .toString()) ==
                                     false;
-                                _channel.sink.add(
-                                    "Tạm dừng máy ${deviceQueryResult.deviceId}");
-                                _channel.sink.close(status.goingAway);
+                                hubConnection.invoke('methodName',
+                                    args: <Object>[
+                                      'Tạm Dừng máy ${deviceQueryResult.deviceId}}'
+                                    ]);
                               }),
                         ),
                         Container(
@@ -245,10 +241,13 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                               height: SizeConfig.screenHeight * 0.07121,
                               onPressed: () {
                                 bool connectMachine = bool.fromEnvironment(
-                                        deviceQueryResult.connected.toString()) ==
+                                        deviceQueryResult.connected
+                                            .toString()) ==
                                     true;
-                                _channel.sink.add(connectMachine);
-                                _channel.sink.close(status.goingAway);
+                                hubConnection.invoke('methodName',
+                                    args: <Object>[
+                                      'Tiêp tục máy ${deviceQueryResult.deviceId}'
+                                    ]);
                               }),
                         )
                       ],
@@ -287,10 +286,14 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                         text7: "Chế độ vận hành",
                         text8: "Số sản phẩm/lần ép",
                         data4: product.mold!.id.toString(),
-                        data5: deviceQueryResult.tagQueryResults[0].value.toString(),
-                        data6: deviceQueryResult.tagQueryResults[1].value.toString(),
-                        data7: deviceQueryResult.tagQueryResults[4].value.toString(),
-                        data8: deviceQueryResult.tagQueryResults[2].value.toString(),
+                        data5: deviceQueryResult.tagQueryResults[0].value
+                            .toString(),
+                        data6: deviceQueryResult.tagQueryResults[1].value
+                            .toString(),
+                        data7: deviceQueryResult.tagQueryResults[4].value
+                            .toString(),
+                        data8: deviceQueryResult.tagQueryResults[2].value
+                            .toString(),
                       ),
                     ),
                     SizedBox(height: SizeConfig.screenHeight * 0.0256),
@@ -316,11 +319,15 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenHeight * 0.1230,
                                 height: SizeConfig.screenHeight * 0.1230,
                                 decoration: BoxDecoration(
-                                  color: 
-                                    (deviceQueryResult.tagQueryResults[4].value == 1
-                                    ||deviceQueryResult.tagQueryResults[4].value == 2
-                                    ||deviceQueryResult.tagQueryResults[4].value == 3
-                                    )
+                                  color: (deviceQueryResult
+                                                  .tagQueryResults[4].value ==
+                                              1 ||
+                                          deviceQueryResult
+                                                  .tagQueryResults[4].value ==
+                                              2 ||
+                                          deviceQueryResult
+                                                  .tagQueryResults[4].value ==
+                                              3)
                                       ? Colors.green
                                       : Colors.black26,
                                   shape: BoxShape.circle,
@@ -339,9 +346,9 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenHeight * 0.1230,
                                 height: SizeConfig.screenHeight * 0.1230,
                                 decoration: BoxDecoration(
-                                  color: warning ? Colors.red : Colors.black26,
-                                  shape: BoxShape.circle,
-                                ),
+                                    // color: warning ? Colors.red : Colors.black26,
+                                    // shape: BoxShape.circle,
+                                    ),
                               ),
                               const Text(
                                 "CẢNH BÁO",
@@ -359,6 +366,4 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
           },
         ));
   }
-
-  void machineDetailsHandlers(List<dynamic>? data) {}
 }

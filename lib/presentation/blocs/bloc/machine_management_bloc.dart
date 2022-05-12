@@ -17,7 +17,7 @@ class MachinesManagementBloc
     if (event is FetchDetailMachinesEvent) {
       final res = await _getMachineUseCase.getMachineDetails();
       final product = res;
-      return emit(MachineManagementStateLoaded([], product));
+      return emit(MachineManagementStateLoaded([], product ));
     }
   }
 }

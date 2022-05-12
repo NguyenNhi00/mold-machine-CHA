@@ -38,8 +38,9 @@ Future<void> initialDependencies() async {
 
   //regis bloC
   injector.registerFactory<LoginBloc>(() => LoginBloc(injector()));
-  injector.registerFactory<MachineDetailsBloc>(
-      () => MachineDetailsBloc());
+  // injector.registerFactory<MachineDetailsBloc>(
+  //     () => MachineDetailsBloc());
+  injector.registerSingleton<MachineDetailsBloc>(MachineDetailsBloc());
   injector
       .registerFactory<MoldParameterBloc>(() => MoldParameterBloc(injector()));
   injector.registerFactory<MachinesManagementBloc>(

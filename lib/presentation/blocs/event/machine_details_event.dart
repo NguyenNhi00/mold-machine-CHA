@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/mold.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
@@ -11,23 +12,18 @@ import '../../../domain/entities/mold_monitor.dart';
 abstract class MachineEvent extends Equatable {}
 
 class MachineDetailsEventHubConnected extends MachineEvent {
-  DateTime timestamp;
-  HubConnection hubConnection;
   MachineDetailsEventHubConnected(
-      {required this.hubConnection, required this.timestamp});
+      );
   @override
-  List<Object> get props => [timestamp, hubConnection];
+  List<Object> get props => [];
 }
 
 class MachineDetailsEventDataUpDated extends MachineEvent {
-  DateTime timestamp;
-  NodeQueryResult nodeQueryResult;
-  MachineDetailsEventDataUpDated(
-      {required this.timestamp,
-      required this.nodeQueryResult,
-      });
+  NodeQueryResultModel nodeQueryResultModel;
+  MachineDetailsEventDataUpDated({required this.nodeQueryResultModel}
+);
   @override
-  List<Object> get props => [timestamp];
+  List<Object> get props => [nodeQueryResultModel];
 }
 
 class MachineDetailsEventConnectFail extends MachineEvent {

@@ -1,9 +1,248 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/bloc/login_bloc.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_details_bloc.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/event/login_event.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/event/machine_details_event.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/state/login_state.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/password_preferences.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/username_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _passwordErr = false;
+  bool _userErr = false;
+  bool _isShow = true;
+  TextEditingController userController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    userController.text = UsernamePreferences.getUsername() ?? '';
+    passController.text = PasswordPreferences.getPassword() ?? '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'ĐĂNG NHẬP',
+            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Constants.mainColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.white,
+            tooltip: 'nut tro ve',
+            iconSize: 24.0,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: BlocConsumer<LoginBloc, LoginState>(
+            listener: (context, loginstate) async {
+              if (loginstate is LoginStateLoginSuccessful) {
+              }
+              // else if(loginstate is LoginDoneState){
+              //   loadingDialog.dismiss();
+              //}
+              else if (loginstate is LoginStateFormatChecking) {
+                _passwordErr = loginstate.isPasswordErr;
+                _userErr = loginstate.isUsernameErr;
+              } else if (loginstate is LoginStateToggleShow) {
+                _isShow = !loginstate.isShow;
+              } else if (loginstate is LoginStateLoginSuccessful) {
+                await UsernamePreferences.setUsername(userController.text);
+                await PasswordPreferences.setPassword(passController.text);
+                // ignore: unused_local_variable
+                String? employeeIdoverrall =
+                    loginstate.user.employee?.employeeId;
+                // ignore: unused_local_variable
+                String? employeeFirstnameoverrall =
+                    loginstate.user.employee?.firstname;
+                // ignore: unused_local_variable
+                String? employeeLastnameoverrall =
+                    loginstate.user.employee?.lastname;
+                // Navigator.popAndPushNamed(context, '/third', arguments: {
+                //   'Id': employeeIdoverrall.toString(),
+                //   'Firstname': employeeFirstnameoverrall.toString(),
+                //   'Lastname': employeeLastnameoverrall.toString(),
+                // }
+                // );
+              }
+            },
+            builder: (context, loginState) {
+              SizeConfig().init(context);
+              return Column(
+                children: [
+                  ListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.screenWidth * 0.0781,
+                        right: SizeConfig.screenWidth * 0.0781),
+                    children: <Widget>[
+                      SizedBox(height: SizeConfig.screenHeight * 0.1656),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: const AssetImage(
+                                'lib/assets/logohunganh_1.jpg'),
+                            width: SizeConfig.screenWidth * 0.2360,
+                          ),
+                          SizedBox(
+                            width: SizeConfig.screenWidth * 0.0524,
+                          ),
+                          Image(
+                            image: const AssetImage('lib/assets/logobk.jpg'),
+                            width: SizeConfig.screenWidth * 0.2560,
+                          )
+                        ],
+                      ),
+                      SizedBox(height: SizeConfig.screenHeight * 0.05761),
+                      TextField(
+                        controller: userController,
+                        decoration: InputDecoration(
+                        
+                          icon: Icon(Icons.assignment_ind_outlined,size: 15,),
+                          hintText: 'Tên Đăng Nhập',
+                          hintStyle: const TextStyle(fontSize: 18),
+                          errorText: _userErr
+                              ? 'Tên Đăng Nhập Phải Dài Hơn 3 Ký Tự'
+                              : null,
+                          errorStyle: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 15,
+                          ),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.grey)),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide:
+                                const BorderSide(color: Colors.grey, width: 2),
+                            gapPadding: 15,
+                          ),
+                        ),
+                        onChanged: (_) {
+                          BlocProvider.of<LoginBloc>(context).add(
+                              LoginEventChecking(
+                                  userController.text, passController.text));
+                        },
+                      ),
+                      SizedBox(height: SizeConfig.screenHeight * 0.03761),
+                      Stack(alignment: AlignmentDirectional.topEnd, children: [
+                        TextFormField(
+                          obscureText: _isShow,
+                          controller: passController,
+                          decoration: InputDecoration(
+                            icon: const Icon(Icons.password,size: 15,),
+                            hintText: 'Mật Khẩu',
+                            hintStyle: const TextStyle(fontSize: 18),
+                            errorText: _userErr
+                                ? 'Mật Khẩu Phải Dài Hơn 6 Ký Tự'
+                                : null,
+                            errorStyle: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                            ),
+                            contentPadding: const EdgeInsets.fromLTRB(
+                                20.0, 10.0, 20.0, 10.0),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide:
+                                    const BorderSide(color: Colors.grey)),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(
+                                  color: Colors.grey, width: 2),
+                              gapPadding: 15,
+                            ),
+                          ),
+                          onChanged: (_) {
+                            BlocProvider.of<LoginBloc>(context).add(
+                                LoginEventChecking(
+                                    userController.text, passController.text));
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            BlocProvider.of<LoginBloc>(context)
+                                .add(LoginEventToggleShow(_isShow));
+                          },
+                          icon: Icon(
+                            _isShow ? Icons.visibility_off : Icons.visibility,
+                            color: Constants.mainColor,
+                          ),
+                        )
+                      ]),
+                      SizedBox(
+                        height: SizeConfig.screenHeight * 0.04375,
+                      ),
+                      Container(
+                        width: SizeConfig.screenWidth * 0.3,
+                        height: SizeConfig.screenHeight * 0.0815,
+                        padding: EdgeInsets.only(
+                            left: SizeConfig.screenWidth * 0.2109,
+                            right: SizeConfig.screenWidth * 0.2109),
+                        child: SizedBox(
+                          width: SizeConfig.screenWidth * 0.3,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Constants.mainColor),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)))),
+                            onPressed: () {
+                              // (userController.text == "" ||
+                              //         passController.text == "" ||
+                              //         _userErr ||
+                              //         _passwordErr)
+                              //     ? null
+                              //     : () async {
+                              //         BlocProvider.of<LoginBloc>(context).add(
+                              //             LoginLoadingEvent(
+                              //                 userController.text,
+                              //                 passController.text,
+                              //                 ));
+                              //       };
+                             
+                              Navigator.pushNamed(
+                                  context, '/DeviceQueryResultView');
+                            },
+                            child: const Text(
+                              'ĐĂNG NHẬP',
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        ));
   }
 }

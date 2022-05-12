@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class TagQueryResult extends Equatable {
-  final String tagName;
-  final Object value;
+   String tagName;
+   Object value;
 
-  const TagQueryResult({
+   TagQueryResult({
     required this.tagName,
     required this.value,
   });
@@ -15,11 +15,11 @@ class TagQueryResult extends Equatable {
 }
 
 class DeviceQueryResult extends Equatable {
-  final String deviceId;
-  final bool connected;
-  final List<TagQueryResult> tagQueryResults;
+ String deviceId;
+ bool connected;
+ List<TagQueryResult> tagQueryResults;
 
-  const DeviceQueryResult({
+ DeviceQueryResult({
     required this.deviceId,
     required this.connected,
     required this.tagQueryResults,
@@ -31,11 +31,11 @@ class DeviceQueryResult extends Equatable {
 }
 
 class NodeQueryResult extends Equatable {
-  final String eonNodeId;
-  final bool connected;
-  final List<DeviceQueryResult> deviceQueryResults;
+ String eonNodeId;
+ bool connected;
+ List<DeviceQueryResult> deviceQueryResults;
 
- const NodeQueryResult({
+ NodeQueryResult({
    required this.eonNodeId,
    required this.connected,
    required this.deviceQueryResults,

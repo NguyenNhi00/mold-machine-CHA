@@ -15,13 +15,13 @@ class NodeQueryResultModel extends NodeQueryResult {
       deviceQueryResults: json['deviceQueryResults'] == null
           ?[]
           :(json['deviceQueryResults'] as List)
-          .map((e) => DeviceQueryResultMode.fromJson(e))
+          .map((e) => DeviceQueryResultModel.fromJson(e))
           .toList());
   }
 }
 
-class DeviceQueryResultMode extends DeviceQueryResult {
-  DeviceQueryResultMode(
+class DeviceQueryResultModel extends DeviceQueryResult {
+  DeviceQueryResultModel(
       {required String deviceId,
       required bool connected,
       required List<TagQueryResult> tagQueryResults})
@@ -29,9 +29,9 @@ class DeviceQueryResultMode extends DeviceQueryResult {
             deviceId: deviceId,
             connected: connected,
             tagQueryResults: tagQueryResults);
-  factory DeviceQueryResultMode.fromJson(Map<String,dynamic> json){
-    return DeviceQueryResultMode(
-      deviceId: json['DeviceId'] as String, 
+  factory DeviceQueryResultModel.fromJson(Map<String,dynamic> json){
+    return DeviceQueryResultModel(
+      deviceId: json['deviceId'] as String, 
       connected: bool.fromEnvironment(json['connected'].toString()), 
       tagQueryResults: json['tagQueryResults'] == null
           ?[]
@@ -46,7 +46,7 @@ class TagQueryResultModel extends TagQueryResult {
       : super(tagName: tagName, value: value);
   factory TagQueryResultModel.fromJson(Map<String,dynamic> json){
     return TagQueryResultModel(
-      tagName: json['Tagnames'] as String, 
+      tagName: json['tagName'],
       value: json['value'],
       );
   }
