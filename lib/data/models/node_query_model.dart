@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
-import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 
 class DeviceQuryModel extends NodeQuery {
   DeviceQuryModel(

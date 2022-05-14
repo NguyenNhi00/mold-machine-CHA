@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
+import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 
 class MachinesManagementEvent extends Equatable {
   @override
@@ -8,4 +10,10 @@ class MachinesManagementEvent extends Equatable {
 class FetchDetailMachinesEvent extends MachinesManagementEvent {
   @override
   List<Object?> get props => [];
+}
+class GetDataSignalEvent extends MachinesManagementEvent{
+  NodeQueryResultModel nodeQueryResultModel;
+  GetDataSignalEvent(this.nodeQueryResultModel);
+  @override
+  List<Object> get props => [];
 }

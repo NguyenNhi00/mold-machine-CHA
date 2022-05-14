@@ -6,6 +6,7 @@ class Global {
   static int id = 0;
   static int machineLengh = 0;
   static int machineindex = 0;
+  static String moldId = '';
   static DeviceQueryResult deviceQueryResult = DeviceQueryResult(deviceId: 'deviceId', connected: false, tagQueryResults: []);
   static NodeQueryResultModel nodeQueryResultModel = NodeQueryResultModel(eonNodeId: '', connected: false, deviceQueryResults: []);
 }

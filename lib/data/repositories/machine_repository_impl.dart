@@ -11,8 +11,8 @@ class MachineRepositoryImpl extends MachineRepository {
   Future<List<ProductModel>> getProductDetail() {
     return _machineService.getProductData();
   }
-  @override
-  Future<List<MachineModel>> getMachinesData(){
-    return _machineService.getmachinesData();
-  }
+  // @override
+  // Future<List<MachineModel>> getMachinesData(){
+  //   return _machineService.getmachinesData();
+  // }
 }

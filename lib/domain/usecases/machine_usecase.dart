@@ -12,10 +12,10 @@ class GetMachineUseCase {
     final product = await _machineRepository.getProductDetail();
     return product;
   }
-  Future<List<Machine>> getmachinesData() async{
-    final machines = await _machineRepository.getMachinesData();
-    return machines;
-  }
+  // Future<List<Machine>> getmachinesData() async{
+  //   final machines = await _machineRepository.getMachinesData();
+  //   return machines;
+  // }
 
   Future<void> modifyStatusMachine() async {
     final request =

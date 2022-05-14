@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
@@ -17,6 +19,8 @@ import 'package:injection_molding_machine_application/presentation/widgets/globa
 class AppRouter {
   static NodeQueryResult nodeQueryResult =
       NodeQueryResult(connected: false, deviceQueryResults: [], eonNodeId: '');
+  static NodeQueryResultModel nodeQueryResultModel = NodeQueryResultModel(
+      eonNodeId: '', connected: false, deviceQueryResults: []);
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
@@ -42,7 +46,7 @@ class AppRouter {
                       connected: false,
                       deviceQueryResults: [],
                       eonNodeId: ''))),
-            child: DeviceQueryResultView(),
+            child: DeviceQueryResultView(nodeQueryResultModel),
           ),
         );
       case '/MachineDetailsScreen':
@@ -51,6 +55,11 @@ class AppRouter {
                 create: (context) =>
                     injector()..add(FetchDetailMachinesEvent()),
                 child: MachineDetailsScreen(Global.deviceQueryResult)));
+      // return MaterialPageRoute(builder: (context) => MultiBlocProvider(
+      //   providers: [
+      //     BlocProvider<MachinesManagementBloc>(create:(context) => MachinesManagementBloc(),)
+      //   ],
+      //   child: child))
       default:
         return MaterialPageRoute(builder: (context) => AllModeScreen());
     }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
@@ -36,15 +35,27 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
   Future<void> onGetDataSignalR(
       MachineEvent event, Emitter<MachineDetailsState> emit) async {
     if (event is MachineDetailsEventDataUpDated) {
-      List<String> tagQuery = [
+      List<String> tagQueryL6 = [
         'L6.CycleTime',
         'L6.OpenTime',
         'L6.CounterShot',
         'L6.SetCycle',
         'L6.MachineStatus'
       ];
-      DeviceQuery deviceQuery = DeviceQuery(deviceId: 'l6', tagNames: tagQuery);
-      List<DeviceQuery> deviceQueries = [deviceQuery];
+      // List<String> tagQueryL7 = [
+      //   'L7.CycleTime',
+      //   'L7.OpenTime',
+      //   'L7.CounterShot',
+      //   'L7.SetCycle',
+      //   'L7.MachineStatus'
+      // ];
+      List<String> tagQueryList = 
+          [
+            '$tagQueryL6', 
+           // '$tagQueryL7'
+            ];
+      DeviceQuery deviceQueryL6 = DeviceQuery(deviceId: 'l6', tagNames: tagQueryL6);
+      List<DeviceQuery> deviceQueries = [deviceQueryL6];
       NodeQuery nodeQuery =
           NodeQuery(eonNodeId: 'imm', deviceQueries: deviceQueries);
       List deviceQueryJsons = [];
@@ -52,7 +63,7 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
       for (int i = 0; i < deviceQueries.length; i++) {
         Map<String, dynamic> deviceQueryJson = {
           'DeviceId': deviceQueries[i].deviceId,
-          'Tagnames': tagQuery,
+          'Tagnames': deviceQueries[i].tagNames,
         };
         deviceQueryJsons.add(deviceQueryJson);
       }
@@ -73,7 +84,6 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
       hubConnection.serverTimeoutInMilliseconds = 100000;
       hubConnection.onclose((error) => print("Connection Closed"));
       await hubConnection.start();
-      if (hubConnection.state == HubConnectionState.connected) {
         print(hubConnection.state);
         var nodeQueryResultSignalR = await hubConnection
             .invoke("GetListTagsWithJson", args: <String>[json.toString()]);
@@ -81,7 +91,6 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
         event.nodeQueryResultModel =
             NodeQueryResultModel.fromJson(nodeQueryResultSignalR);
         print(event.nodeQueryResultModel.deviceQueryResults.length);
-      }
       return emit(MachineDetailsStateDataUpdated(
           nodeQueryResultModel: event.nodeQueryResultModel));
     }

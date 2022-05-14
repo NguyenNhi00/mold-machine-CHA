@@ -3,5 +3,5 @@ import 'package:injection_molding_machine_application/domain/entities/configurat
 
 abstract class MachineRepository {
   Future<List<Product>> getProductDetail();
-  Future<List<Machine>> getMachinesData();
+  //Future<List<Machine>> getMachinesData();
 }

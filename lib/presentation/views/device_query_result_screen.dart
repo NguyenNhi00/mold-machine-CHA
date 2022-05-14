@@ -1,35 +1,32 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injection_molding_machine_application/data/models/error_package.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
-import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_details_bloc.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/event/machine_details_event.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machine_details_state.dart';
-import 'package:injection_molding_machine_application/presentation/views/machine_details_screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import 'machine_details_screen.dart';
+
 class DeviceQueryResultView extends StatefulWidget {
-  _DeviceQueryResultViewState createState() => _DeviceQueryResultViewState();
+  NodeQueryResultModel nodeQueryResult;
+  DeviceQueryResultView(this.nodeQueryResult);
+
+  _DeviceQueryResultViewState createState() => _DeviceQueryResultViewState(nodeQueryResult);
 }
 
 class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
   late HubConnection hubConnection;
+  NodeQueryResultModel nodeQueryResult;
+  _DeviceQueryResultViewState(this.nodeQueryResult);
   List<DeviceQueryResult> deviceQueryResultList = [];
   DeviceQueryResult deviceQueryResult = DeviceQueryResult(
       deviceId: 'deviceId', connected: false, tagQueryResults: []);
   List<TagQueryResult> tagQueryResultList = [];
   TagQueryResult tagQueryResult = TagQueryResult(tagName: '', value: '');
   List<DeviceQueryResult> connectedDeviceQueryResult = [];
-  NodeQueryResultModel nodeQueryResult = NodeQueryResultModel(
-      connected: false, deviceQueryResults: [], eonNodeId: '');
   @override
   void initState() {
     super.initState();
@@ -38,13 +35,13 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 1,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(text: "Tất cả"),
-              //Tab(text: "Đang chạy"),
+              Tab(text: "Đang chạy"),
             ],
           ),
           title: const Text('Quản lý máy ép'),
@@ -82,8 +79,8 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                       color: Colors.white,
                     ),
                     const Text(
-                      'Người Kiểm Tra:',
-                      style: TextStyle(fontSize: 23, color: Colors.white),
+                      'Người Kiểm Tra: nhi0201',
+                      style: TextStyle(fontSize: 17, color: Colors.white),
                     ),
                   ],
                 ),
@@ -149,12 +146,25 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
           if (machineDetailsState is MachineDetailsStateConnectSuccessful) {
           } else if (machineDetailsState is MachineDetailsStateDataUpdated) {
             nodeQueryResult = machineDetailsState.nodeQueryResultModel;
-          } else if (machineDetailsState is MachineDetailsStateInit) {
-            
-            } 
+            for (int i = 0;
+                i < nodeQueryResult.deviceQueryResults.length;
+                i++) {
+              if (nodeQueryResult
+                          .deviceQueryResults[i].tagQueryResults[4].value ==
+                      1 ||
+                  nodeQueryResult
+                          .deviceQueryResults[i].tagQueryResults[4].value ==
+                      2 ||
+                  nodeQueryResult
+                          .deviceQueryResults[i].tagQueryResults[4].value ==
+                      3) {
+                connectedDeviceQueryResult
+                    .add(nodeQueryResult.deviceQueryResults[i]);
+              }
+            }
+          } else if (machineDetailsState is MachineDetailsStateInit) {}
         }, builder: (context, machineDetailState) {
-          if (machineDetailState is MachineDetailsStateDataUpdated
-          ) {
+          if (machineDetailState is MachineDetailsStateDataUpdated) {
             return TabBarView(
               children: [
                 GridView.builder(
@@ -166,8 +176,11 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                   itemCount: nodeQueryResult.deviceQueryResults.length,
                   itemBuilder: (context, index) {
                     return Column(
-                      children: [ 
-                        Text('Mã máy: ${nodeQueryResult.deviceQueryResults[index].deviceId}'),
+                      children: [
+                        Text(
+                          'Mã máy: ${nodeQueryResult.deviceQueryResults[index].deviceId}',
+                          style: const TextStyle(fontSize: 20, color: Colors.blue,fontWeight: FontWeight.bold),
+                        ),
                         Expanded(
                           child: GestureDetector(
                             child: Image(
@@ -175,8 +188,8 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                               width: SizeConfig.screenWidth * 0.3650,
                             ),
                             onTap: () {
-                              Global.deviceQueryResult = nodeQueryResult
-                                  .deviceQueryResults[index];
+                              Global.deviceQueryResult =
+                                  nodeQueryResult.deviceQueryResults[index];
                               Navigator.pushNamed(
                                   context, '/MachineDetailsScreen');
                             },
@@ -207,9 +220,76 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                                   : "Ngắt kết nối",
                               style: TextStyle(
                                   fontSize: 20,
+                                  color: bool.fromEnvironment(nodeQueryResult
+                                          .deviceQueryResults[index].connected
+                                          .toString())
+                                      ? Colors.green
+                                      : Colors.red),
+                            ),
+                            const SizedBox(width: 20),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                // machines connecting creen
+                GridView.builder(
+                  padding: const EdgeInsets.all(10),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: SizeConfig.screenWidth * 0.0650,
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: connectedDeviceQueryResult.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Text(connectedDeviceQueryResult[index]
+                            .deviceId
+                            .toString()),
+                        Expanded(
+                          child: GestureDetector(
+                            child: Image(
+                              image: const AssetImage('lib/assets/may_ep.jpg'),
+                              width: SizeConfig.screenWidth * 0.3650,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MachineDetailsScreen(
+                                      connectedDeviceQueryResult[index])));
+                            },
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              bool.fromEnvironment(
+                                      connectedDeviceQueryResult[index]
+                                          .connected
+                                          .toString())
+                                  ? Icons.check_box_rounded
+                                  : Icons.check_box_outline_blank_rounded,
+                              color: bool.fromEnvironment(
+                                      connectedDeviceQueryResult[index]
+                                          .connected
+                                          .toString())
+                                  ? Colors.green
+                                  : Colors.red,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              bool.fromEnvironment(
+                                      connectedDeviceQueryResult[index]
+                                          .connected
+                                          .toString())
+                                  ? "Đang kết nối"
+                                  : "Ngắt kết nối",
+                              style: TextStyle(
+                                  fontSize: 20,
                                   color: bool.fromEnvironment(
-                                          nodeQueryResult
-                                              .deviceQueryResults[index]
+                                          connectedDeviceQueryResult[index]
                                               .connected
                                               .toString())
                                       ? Colors.green
@@ -222,75 +302,6 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
                     );
                   },
                 ),
-                // // machines connecting creen
-                // GridView.builder(
-                //   padding: const EdgeInsets.all(10),
-                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //     crossAxisSpacing: SizeConfig.screenWidth * 0.0650,
-                //     crossAxisCount: 2,
-                //   ),
-                //   itemCount: connectedDeviceQueryResult.length,
-                //   itemBuilder: (context, index) {
-                //     return Column(
-                //       children: [
-                //         Text(connectedDeviceQueryResult[index]
-                //             .deviceId
-                //             .toString()),
-                //         Expanded(
-                //           child: GestureDetector(
-                //             child: Image(
-                //               image: const AssetImage('lib/assets/may_ep.jpg'),
-                //               width: SizeConfig.screenWidth * 0.3650,
-                //             ),
-                //             onTap: () {
-                //               Navigator.of(context).push(MaterialPageRoute(
-                //                   builder: (context) => MachineDetailsScreen(
-                //                       connectedDeviceQueryResult[index])));
-                //             },
-                //           ),
-                //         ),
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             Icon(
-                //               bool.fromEnvironment(
-                //                       connectedDeviceQueryResult[index]
-                //                           .connected
-                //                           .toString())
-                //                   ? Icons.check_box_rounded
-                //                   : Icons.check_box_outline_blank_rounded,
-                //               color: bool.fromEnvironment(
-                //                       connectedDeviceQueryResult[index]
-                //                           .connected
-                //                           .toString())
-                //                   ? Colors.green
-                //                   : Colors.red,
-                //               size: 20,
-                //             ),
-                //             const SizedBox(width: 10),
-                //             Text(
-                //               bool.fromEnvironment(
-                //                       connectedDeviceQueryResult[index]
-                //                           .connected
-                //                           .toString())
-                //                   ? "Đang kết nối"
-                //                   : "Ngắt kết nối",
-                //               style: TextStyle(
-                //                   fontSize: 20,
-                //                   color: bool.fromEnvironment(
-                //                           connectedDeviceQueryResult[index]
-                //                               .connected
-                //                               .toString())
-                //                       ? Colors.green
-                //                       : Colors.red),
-                //             ),
-                //             const SizedBox(width: 20),
-                //           ],
-                //         ),
-                //       ],
-                //     );
-                //   },
-                // ),
               ],
             );
           } else {

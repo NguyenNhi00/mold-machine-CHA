@@ -1,18 +1,17 @@
-import 'dart:async';
 import 'dart:core';
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
+import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_management_bloc.dart';
+import 'package:injection_molding_machine_application/presentation/blocs/event/machines_management_event.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machines_management_event.dart';
+import 'package:injection_molding_machine_application/presentation/views/device_query_result_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/operating_params_reliability.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/mold_params_reliability.dart';
-import '../../data/models/error_package.dart';
-import '../blocs/bloc/machine_details_bloc.dart';
-import '../blocs/event/machine_details_event.dart';
 import '../widgets/widgets.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +30,9 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
   //final _channel = WebSocketChannel.connect(Uri.parse(Constants.signalRUrl));
   late HubConnection hubConnection;
   List<Product> productList = [];
-  List<Machine> machineList = [];
-  Machine machine = Machine();
+  List<Machine> reShift = [];
+  NodeQueryResultModel nodeQueryResultModel = NodeQueryResultModel(
+      eonNodeId: '', connected: false, deviceQueryResults: []);
   Product product = Product();
   @override
   void initState() {
@@ -52,7 +52,14 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/DeviceQueryResultView');
+              // BlocProvider.of<MachinesManagementBloc>(context)
+              //     .add(GetDataSignalEvent(nodeQueryResultModel));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             DeviceQueryResultView(nodeQueryResultModel)));
+              Navigator.pop(context);
             },
           ),
         ),
@@ -145,12 +152,16 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
           listener: (context, MachineManagementState state) {
             if (state is MachineManagementStateLoaded) {
               productList = state.productList;
-              for (int i = 0; i < productList.length; i++) {
-                if (productList[i].machine!.id == deviceQueryResult.deviceId) {
-                  product = configuration[i].product!;
-                }
+              print('productList: $productList');
+              for (int i = 0; i < reShift.length; i++) {
+                // if();
               }
+              // for(int i = 0; i < machineList.length; i++){
+              //   if()
+              // }
               print('information: $product');
+            } else if (state is GetDataSignalRState) {
+              nodeQueryResultModel = state.nodeQueryResultModel;
             }
           },
           builder: (context, MachineDetailsState) {
@@ -179,15 +190,28 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                               fontSize: 15,
                               width: SizeConfig.screenWidth * 0.3121,
                               height: SizeConfig.screenHeight * 0.07121,
-                              onPressed: () {
+                              onPressed: () async {
                                 bool disconnectMachine = bool.fromEnvironment(
                                         deviceQueryResult.connected
                                             .toString()) ==
                                     false;
-                                hubConnection.invoke('methodName',
-                                    args: <Object>[
-                                      'Tạm Dừng máy ${deviceQueryResult.deviceId}}'
-                                    ]);
+                                hubConnection = HubConnectionBuilder()
+                                    .withUrl(Constants.signalRUrl)
+                                    .withAutomaticReconnect()
+                                    .build();
+                                // hubConnection.keepAliveIntervalInMilliseconds = 15000;
+                                hubConnection.serverTimeoutInMilliseconds =
+                                    100000;
+                                hubConnection.onclose(
+                                    (error) => print("Connection Closed"));
+                                await hubConnection.start();
+                                if (hubConnection.state ==
+                                    HubConnectionState.connected) {
+                                  hubConnection.invoke('methodName',
+                                      args: <String>[
+                                        'Tạm Dừng máy ${deviceQueryResult.deviceId}'
+                                      ]);
+                                }
                               }),
                         ),
                         Container(
@@ -199,15 +223,28 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                               fontSize: 15,
                               width: SizeConfig.screenWidth * 0.3121,
                               height: SizeConfig.screenHeight * 0.07121,
-                              onPressed: () {
+                              onPressed: () async {
                                 bool connectMachine = bool.fromEnvironment(
                                         deviceQueryResult.connected
                                             .toString()) ==
                                     true;
-                                hubConnection.invoke('methodName',
-                                    args: <Object>[
-                                      'Tiêp tục máy ${deviceQueryResult.deviceId}'
-                                    ]);
+                                hubConnection = HubConnectionBuilder()
+                                    .withUrl(Constants.signalRUrl)
+                                    .withAutomaticReconnect()
+                                    .build();
+                                // hubConnection.keepAliveIntervalInMilliseconds = 15000;
+                                hubConnection.serverTimeoutInMilliseconds =
+                                    100000;
+                                hubConnection.onclose(
+                                    (error) => print("Connection Closed"));
+                                await hubConnection.start();
+                                if (hubConnection.state ==
+                                    HubConnectionState.connected) {
+                                  hubConnection.invoke('methodName',
+                                      args: <String>[
+                                        'Tiêp tục máy ${deviceQueryResult.deviceId}'
+                                      ]);
+                                }
                               }),
                         )
                       ],
@@ -245,7 +282,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                         text6: "Thời gian mở cửa",
                         text7: "Chế độ vận hành",
                         text8: "Số sản phẩm/lần ép",
-                        data4: product.mold!.id.toString(),
+                        data4: '', //product.mold!.id.toString(),
                         data5: deviceQueryResult.tagQueryResults[0].value
                             .toString(),
                         data6: deviceQueryResult.tagQueryResults[1].value

@@ -6,7 +6,8 @@ class Constants {
   static const Color mainColor = Color(0xff001D37);
   static const Color secondaryColor = Color(0xff00294D);
   static const String baseUrlProduct =
-      "http://192.168.1.80:8082/api/products/details/"; // hoi lai bé Đạt đường link lấy theo từng DeviceId
+      "http://192.168.1.80:8082/api/products/details/";
+  // hoi lai bé Đạt đường link lấy theo từng DeviceId
   static const String signalRUrl =
       "http://192.168.1.80:8085/websockethub";
   static const String baseUrlMachine = '';
