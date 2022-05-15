@@ -11,19 +11,17 @@ import 'package:signalr_core/signalr_core.dart';
 import 'machine_details_screen.dart';
 
 class DeviceQueryResultView extends StatefulWidget {
-  NodeQueryResultModel nodeQueryResult;
-  DeviceQueryResultView(this.nodeQueryResult);
+  DeviceQueryResultView();
 
-  _DeviceQueryResultViewState createState() => _DeviceQueryResultViewState(nodeQueryResult);
+  _DeviceQueryResultViewState createState() => _DeviceQueryResultViewState();
 }
 
 class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
   late HubConnection hubConnection;
-  NodeQueryResultModel nodeQueryResult;
-  _DeviceQueryResultViewState(this.nodeQueryResult);
   List<DeviceQueryResult> deviceQueryResultList = [];
   DeviceQueryResult deviceQueryResult = DeviceQueryResult(
       deviceId: 'deviceId', connected: false, tagQueryResults: []);
+  NodeQueryResultModel nodeQueryResult = NodeQueryResultModel(eonNodeId: '', connected: false, deviceQueryResults: []);
   List<TagQueryResult> tagQueryResultList = [];
   TagQueryResult tagQueryResult = TagQueryResult(tagName: '', value: '');
   List<DeviceQueryResult> connectedDeviceQueryResult = [];

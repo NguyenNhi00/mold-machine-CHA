@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/login_bloc.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_details_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/event/login_event.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/event/machine_details_event.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/login_state.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/password_preferences.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/username_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -117,8 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: userController,
                         decoration: InputDecoration(
-                        
-                          icon: Icon(Icons.assignment_ind_outlined,size: 15,),
+                        prefixIcon: const Padding(
+                            padding:
+                                EdgeInsets.only(), // add padding to adjust icon
+                            child: Icon(
+                              Icons.assignment_ind_outlined,
+                              size: 20,
+                            ),
+                          ),
                           hintText: 'Tên Đăng Nhập',
                           hintStyle: const TextStyle(fontSize: 18),
                           errorText: _userErr
@@ -152,7 +156,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: _isShow,
                           controller: passController,
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.password,size: 15,),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets
+                                  .only(), // add padding to adjust icon
+                              child: Icon(
+                                Icons.password_rounded,
+                                size: 20,
+                              ),
+                            ),
                             hintText: 'Mật Khẩu',
                             hintStyle: const TextStyle(fontSize: 18),
                             errorText: _userErr

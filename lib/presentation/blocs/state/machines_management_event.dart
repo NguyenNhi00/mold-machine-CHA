@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
-import 'package:injection_molding_machine_application/data/models/product_model.dart';
+
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 
@@ -23,9 +23,4 @@ class MachineManagementStateLoaded extends MachineManagementState {
 }
 
 class MachineManagementStateLoadFail extends MachineManagementState {}
-class GetDataSignalRState extends MachineManagementState{
-  NodeQueryResultModel nodeQueryResultModel;
-  GetDataSignalRState(this.nodeQueryResultModel);
-  @override
-  List<Object> get props => [nodeQueryResultModel];
-}
+
