@@ -46,7 +46,7 @@ class AppRouter {
                       connected: false,
                       deviceQueryResults: [],
                       eonNodeId: ''))),
-            child: DeviceQueryResultView(nodeQueryResultModel),
+            child: DeviceQueryResultView(),
           ),
         );
       case '/MachineDetailsScreen':

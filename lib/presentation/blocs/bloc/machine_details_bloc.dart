@@ -80,7 +80,7 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
           .withUrl(Constants.signalRUrl)
           .withAutomaticReconnect()
           .build();
-      // hubConnection.keepAliveIntervalInMilliseconds = 15000;
+       hubConnection.keepAliveIntervalInMilliseconds = 15000;
       hubConnection.serverTimeoutInMilliseconds = 100000;
       hubConnection.onclose((error) => print("Connection Closed"));
       await hubConnection.start();

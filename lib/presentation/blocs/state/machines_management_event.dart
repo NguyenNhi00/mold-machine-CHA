@@ -23,9 +23,4 @@ class MachineManagementStateLoaded extends MachineManagementState {
 }
 
 class MachineManagementStateLoadFail extends MachineManagementState {}
-class GetDataSignalRState extends MachineManagementState{
-  NodeQueryResultModel nodeQueryResultModel;
-  GetDataSignalRState(this.nodeQueryResultModel);
-  @override
-  List<Object> get props => [nodeQueryResultModel];
-}
+

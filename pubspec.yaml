@@ -29,13 +29,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # bloc: ^8.0.3
+  flutter_bloc: ^8.0.1
+  ndialog: ^4.1.1
   shared_preferences: 2.0.8
   web_socket_channel: ^2.2.0
   get_it: ^7.2.0
   rflutter_alert: ^2.0.4
-  bloc: ^8.0.3
-  ndialog: ^4.1.1
-  flutter_bloc: ^8.0.1
+  # flutter_bloc: ^8.0.1
   signalr_core: ^1.1.1
   # device_preview: ^1.0.0
 dependency_overrides:

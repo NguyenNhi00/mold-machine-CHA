@@ -160,9 +160,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
               //   if()
               // }
               print('information: $product');
-            } else if (state is GetDataSignalRState) {
-              nodeQueryResultModel = state.nodeQueryResultModel;
-            }
+            } 
           },
           builder: (context, MachineDetailsState) {
             return SingleChildScrollView(
