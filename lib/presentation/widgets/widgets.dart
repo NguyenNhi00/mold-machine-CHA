@@ -36,7 +36,7 @@ class CustomizedButton extends StatelessWidget {
           ),
           child: Text(
             text,
-            style: TextStyle(fontSize: fontSize, color: fgColor),
+            style: TextStyle(fontSize: fontSize, color: fgColor, fontWeight: FontWeight.bold),
           ),
           onPressed: onPressed,
         ),

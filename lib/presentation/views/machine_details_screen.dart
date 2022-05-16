@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
+import 'package:injection_molding_machine_application/domain/entities/preShift.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_management_bloc.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/event/machines_management_event.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machines_management_event.dart';
-import 'package:injection_molding_machine_application/presentation/views/device_query_result_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/operating_params_reliability.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/mold_params_reliability.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 import '../widgets/widgets.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +30,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
   //final _channel = WebSocketChannel.connect(Uri.parse(Constants.signalRUrl));
   late HubConnection hubConnection;
   List<Product> productList = [];
-  List<Machine> reShift = [];
+  List<PreShift> preShiftList = [];
+  PreShift preShift = PreShift();
   NodeQueryResultModel nodeQueryResultModel = NodeQueryResultModel(
       eonNodeId: '', connected: false, deviceQueryResults: []);
   Product product = Product();
@@ -52,13 +53,6 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
               color: Colors.white,
             ),
             onPressed: () {
-              // BlocProvider.of<MachinesManagementBloc>(context)
-              //     .add(GetDataSignalEvent(nodeQueryResultModel));
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             DeviceQueryResultView(nodeQueryResultModel)));
               Navigator.pop(context);
             },
           ),
@@ -86,8 +80,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                       color: Colors.white,
                     ),
                     const Text(
-                      'Người Kiểm Tra:',
-                      style: TextStyle(fontSize: 23, color: Colors.white),
+                      'Người Kiểm Tra: nhi0201',
+                      style: TextStyle(fontSize:17 , color: Colors.white),
                     ),
                   ],
                 ),
@@ -152,9 +146,12 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
           listener: (context, MachineManagementState state) {
             if (state is MachineManagementStateLoaded) {
               productList = state.productList;
+              preShiftList = state.preShiftList;
               print('productList: $productList');
-              for (int i = 0; i < reShift.length; i++) {
-                // if();
+              for (int i = 0; i < preShiftList.length; i++) {
+                if(preShiftList[i].product!.id == deviceQueryResult.deviceId){
+                  preShift = preShiftList[i];
+                }
               }
               // for(int i = 0; i < machineList.length; i++){
               //   if()
@@ -163,6 +160,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
             } 
           },
           builder: (context, MachineDetailsState) {
+            bool warning = false;
             return SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -184,8 +182,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                             right: 5,
                           ),
                           child: CustomizedButton(
-                              text: "Tạm dừng",
-                              fontSize: 15,
+                              text: "Tạm Dừng",
+                              fontSize: 20,
                               width: SizeConfig.screenWidth * 0.3121,
                               height: SizeConfig.screenHeight * 0.07121,
                               onPressed: () async {
@@ -217,8 +215,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                             left: 5,
                           ),
                           child: CustomizedButton(
-                              text: "Tiếp tục",
-                              fontSize: 15,
+                              text: "Tiếp Tục",
+                              fontSize: 20,
                               width: SizeConfig.screenWidth * 0.3121,
                               height: SizeConfig.screenHeight * 0.07121,
                               onPressed: () async {
@@ -256,9 +254,9 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                         text1: "Mã sản phẩm",
                         text2: "Số lượng kế hoạch",
                         text3: "Số lượng thực tế",
-                        data1: product.id.toString(),
-                        data2: '',
-                        data3: '',
+                        data1:'', //preShift.product!.id.toString(),
+                        data2:'', //preShift.totalQuantity.toString(),
+                        data3:'', //deviceQueryResult.tagQueryResults[2].value.toString(),
                       ),
                     ),
                     SizedBox(height: SizeConfig.screenHeight * 0.0256),
@@ -325,6 +323,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                               3)
                                       ? Colors.green
                                       : Colors.black26,
+                                  border: Border.all(),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -341,8 +340,9 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenHeight * 0.1230,
                                 height: SizeConfig.screenHeight * 0.1230,
                                 decoration: BoxDecoration(
-                                    // color: warning ? Colors.red : Colors.black26,
-                                    // shape: BoxShape.circle,
+                                    color: warning? Colors.yellow : Colors.white,
+                                    border:Border.all(),
+                                    shape: BoxShape.circle,
                                     ),
                               ),
                               const Text(

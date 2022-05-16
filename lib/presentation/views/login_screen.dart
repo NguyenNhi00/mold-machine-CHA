@@ -7,6 +7,7 @@ import 'package:injection_molding_machine_application/presentation/blocs/state/l
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/password_preferences.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/username_preferences.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/widgets.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -93,21 +94,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         left: SizeConfig.screenWidth * 0.0781,
                         right: SizeConfig.screenWidth * 0.0781),
                     children: <Widget>[
-                      SizedBox(height: SizeConfig.screenHeight * 0.1656),
+                      SizedBox(height: SizeConfig.screenHeight * 0.0356),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image(
-                            image: const AssetImage(
-                                'lib/assets/logohunganh_1.jpg'),
-                            width: SizeConfig.screenWidth * 0.2360,
-                          ),
-                          SizedBox(
-                            width: SizeConfig.screenWidth * 0.0524,
-                          ),
+                          // Image(
+                          //   image: const AssetImage(
+                          //       'lib/assets/logohunganh_1.jpg'),
+                          //   width: SizeConfig.screenWidth * 0.2360,
+                          // ),
+                          // SizedBox(
+                          //   width: SizeConfig.screenWidth * 0.0524,
+                          // ),
                           Image(
                             image: const AssetImage('lib/assets/logobk.jpg'),
-                            width: SizeConfig.screenWidth * 0.2560,
+                            width: SizeConfig.screenWidth * 0.4560,
                           )
                         ],
                       ),
@@ -204,50 +205,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       ]),
                       SizedBox(
-                        height: SizeConfig.screenHeight * 0.04375,
+                        height: SizeConfig.screenHeight * 0.0637,
                       ),
-                      Container(
-                        width: SizeConfig.screenWidth * 0.3,
-                        height: SizeConfig.screenHeight * 0.0815,
-                        padding: EdgeInsets.only(
-                            left: SizeConfig.screenWidth * 0.2109,
-                            right: SizeConfig.screenWidth * 0.2109),
-                        child: SizedBox(
-                          width: SizeConfig.screenWidth * 0.3,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Constants.mainColor),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30)))),
-                            onPressed: () {
-                              // (userController.text == "" ||
-                              //         passController.text == "" ||
-                              //         _userErr ||
-                              //         _passwordErr)
-                              //     ? null
-                              //     : () async {
-                              //         BlocProvider.of<LoginBloc>(context).add(
-                              //             LoginLoadingEvent(
-                              //                 userController.text,
-                              //                 passController.text,
-                              //                 ));
-                              //       };
-                             
-                              Navigator.pushNamed(
-                                  context, '/DeviceQueryResultView');
-                            },
-                            child: const Text(
-                              'ĐĂNG NHẬP',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ),
-                        ),
-                      ),
+                      CustomizedButton(
+              text: "ĐĂNG NHẬP",
+              fontSize: 20,
+              width: SizeConfig.screenWidth * 0.8521,
+              padding: 10,
+              height: SizeConfig.screenHeight * 0.07121,
+              onPressed: () {
+                Navigator.pushNamed(context, '/modeView');
+              },
+            ),
                     ],
                   )
                 ],

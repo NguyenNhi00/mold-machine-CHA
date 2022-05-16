@@ -16,24 +16,24 @@ class MainAppName extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 30,
+              fontSize: 35,
               fontWeight: FontWeight.bold,
               color: Constants.mainColor),
         ),
-        SizedBox(height: SizeConfig.screenHeight * 0.1056),
+        SizedBox(height: SizeConfig.screenHeight * 0.0556),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: const AssetImage('lib/assets/logohunganh_1.jpg'),
-              width: SizeConfig.screenWidth * 0.2560,
-            ),
-            SizedBox(
-              width: SizeConfig.screenWidth * 0.1024,
-            ),
+            // Image(
+            //   image: const AssetImage('lib/assets/logohunganh_1.jpg'),
+            //   width: SizeConfig.screenWidth * 0.2560,
+            // ),
+            // SizedBox(
+            //   width: SizeConfig.screenWidth * 0.1024,
+            // ),
             Image(
               image: const AssetImage('lib/assets/logobk.jpg'),
-              width: SizeConfig.screenWidth * 0.3060,
+              width: SizeConfig.screenWidth * 0.5006,
             )
           ],
         ),

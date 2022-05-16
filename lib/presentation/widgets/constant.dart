@@ -9,8 +9,8 @@ class Constants {
       "http://192.168.1.80:8082/api/products/details/";
   // hoi lai bé Đạt đường link lấy theo từng DeviceId
   static const String signalRUrl =
-      "http://192.168.1.80:8085/websockethub";
-  static const String baseUrlMachine = '';
+      "http://10.84.70.80:8085/websockethub";
+  static const String baseUrlPreshift = '';
 }
 
 class SizeConfig {

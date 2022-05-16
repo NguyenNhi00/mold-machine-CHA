@@ -16,7 +16,7 @@ class ProductModel extends Product {
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['id'] as String,
-      mold: json['mold'] != null ?  MoldModel.fromJson(json['mold']) : null,
+      mold: json['mold'] != null ? MoldModel.fromJson(json['mold']) : null,
       name: json['name'] as String,
       piecesPerKilogram: json['piecesPerKilogram'] as int ,
       unit: json['unit'] as int,

@@ -4,12 +4,12 @@ import 'package:injection_molding_machine_application/presentation/widgets/const
 import '../widgets/widgets.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/main_app_name.dart';
 
-class HomeScreen extends StatefulWidget {
+class ModeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ModeScreenState createState() => _ModeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ModeScreenState extends State<ModeScreen> {
   NodeQueryResult nodeQueryResult =
       NodeQueryResult(connected: false, deviceQueryResults: [], eonNodeId: '');
   @override
@@ -40,10 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: 80,
               height: SizeConfig.screenHeight * 0.07121,
               onPressed: () {
-                Navigator.pushNamed(context, 'loginView');
+                Navigator.pushNamed(context, 'two');
               },
             ),
-            SizedBox(height: SizeConfig.screenHeight * 0.0028),
+            SizedBox(height: SizeConfig.screenHeight * 0.0528),
+             CustomizedButton(
+              text: "Giám Sát",
+              fontSize: 20,
+              width: SizeConfig.screenWidth * 0.3521,
+              padding: 80,
+              height: SizeConfig.screenHeight * 0.07121,
+              onPressed: () {
+                Navigator.pushNamed(context, 'two');
+              },
+            ),
           ],
         ),
       ),

@@ -14,6 +14,7 @@ import 'package:injection_molding_machine_application/presentation/views/device_
 import 'package:injection_molding_machine_application/presentation/views/login_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/machine_details_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/home_screen.dart';
+import 'package:injection_molding_machine_application/presentation/views/supervision_Screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 
 class AppRouter {
@@ -24,8 +25,8 @@ class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (context) => AllModeScreen());
-      case 'two':
+        return MaterialPageRoute(builder: (context) => HomeScreen());
+      case 'loginView':
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(
                   providers: [
@@ -37,6 +38,10 @@ class AppRouter {
                   ],
                   child: LoginScreen(),
                 ));
+      case '/supervisionView':
+       return MaterialPageRoute(builder: (context) => SupervisionScreen());
+       case '/modeView':
+       return MaterialPageRoute(builder: (context) => SupervisionScreen());
       case '/DeviceQueryResultView':
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MachineDetailsBloc>(
@@ -61,7 +66,7 @@ class AppRouter {
       //   ],
       //   child: child))
       default:
-        return MaterialPageRoute(builder: (context) => AllModeScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:injection_molding_machine_application/data/models/node_query_res
 
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
+import 'package:injection_molding_machine_application/domain/entities/preShift.dart';
 
 class MachineManagementState extends Equatable {
   @override
@@ -14,12 +15,12 @@ class MachineManagementStateUnLoad extends MachineManagementState {}
 class MachineManagementStateLoading extends MachineManagementState {}
 
 class MachineManagementStateLoaded extends MachineManagementState {
-  // List<Machine> machines ;
+  List<PreShift> preShiftList;
   List<Product> productList;
   List<DeviceQueryResult> deviceQueryResult;
-  MachineManagementStateLoaded(this.deviceQueryResult, this.productList);
+  MachineManagementStateLoaded(this.preShiftList,this.deviceQueryResult, this.productList);
   @override
-  List<Object?> get props => [deviceQueryResult,productList];
+  List<Object?> get props => [preShiftList,deviceQueryResult,productList];
 }
 
 class MachineManagementStateLoadFail extends MachineManagementState {}
