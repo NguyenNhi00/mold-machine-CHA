@@ -42,7 +42,7 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
               Tab(text: "Đang chạy"),
             ],
           ),
-          title: const Text('Quản lý máy ép'),
+          title: const Text('QUẢN LÝ MÁY ÉP'),
           backgroundColor: Constants.mainColor,
           leading: IconButton(
             icon: const Icon(
@@ -303,7 +303,15 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
               ],
             );
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: Column(
+                children: const [
+                  SizedBox(height: 200,),
+                  Icon(Icons.touch_app_outlined ,size: 150, color: Constants.mainColor,),
+                  SizedBox(height: 20,),
+                  Text('Đăng nhập thành công', style: TextStyle(fontSize: 25, color: Constants.mainColor),)
+                ],
+              ));
           }
         }),
       ),

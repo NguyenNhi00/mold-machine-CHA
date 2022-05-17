@@ -214,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: 10,
               height: SizeConfig.screenHeight * 0.07121,
               onPressed: () {
-                Navigator.pushNamed(context, '/modeView');
+                Navigator.pushNamed(context, '/DeviceQueryResultView');
               },
             ),
                     ],

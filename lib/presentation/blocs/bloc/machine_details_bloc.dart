@@ -42,20 +42,21 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
         'L6.SetCycle',
         'L6.MachineStatus'
       ];
-      // List<String> tagQueryL7 = [
-      //   'L7.CycleTime',
-      //   'L7.OpenTime',
-      //   'L7.CounterShot',
-      //   'L7.SetCycle',
-      //   'L7.MachineStatus'
-      // ];
+      List<String> tagQueryL10 = [
+        'L10.CycleTime',
+        'L10.OpenTime',
+        'L10.CounterShot',
+        'L10.SetCycle',
+        'L10.MachineStatus'
+      ];
       List<String> tagQueryList = 
           [
             '$tagQueryL6', 
-           // '$tagQueryL7'
+           '$tagQueryL10'
             ];
       DeviceQuery deviceQueryL6 = DeviceQuery(deviceId: 'l6', tagNames: tagQueryL6);
-      List<DeviceQuery> deviceQueries = [deviceQueryL6];
+       DeviceQuery deviceQueryL10 = DeviceQuery(deviceId: 'l10', tagNames: tagQueryL10);
+      List<DeviceQuery> deviceQueries = [deviceQueryL6,deviceQueryL10];
       NodeQuery nodeQuery =
           NodeQuery(eonNodeId: 'imm', deviceQueries: deviceQueries);
       List deviceQueryJsons = [];
