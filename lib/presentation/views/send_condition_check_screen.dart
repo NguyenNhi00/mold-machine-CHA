@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/bloc/send_condition_check.dart';
-import 'package:injection_molding_machine_application/presentation/blocs/state/send_condition_check_state.dart';
-import 'package:injection_molding_machine_application/presentation/views/send_condition_check_screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
-import 'package:injection_molding_machine_application/presentation/widgets/widgets.dart';
 
-class SupervisionScreen extends StatelessWidget {
-  String text1 = "Thông số cài đặt máy ép";
-  String text2 = "Quy trình hoạt động máy ép";
-  String text3 = "Nhân công đứng máy";
-  String text4 = "Nhiệt độ môi trường";
-  String machineId;
-  SupervisionScreen(this.machineId);
+class SendConditionCheckScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('GIÁM SÁT QUY TRÌNH'),
+          title: const Text('BÁO CÁO QUY TRÌNH'),
           backgroundColor: Constants.mainColor,
           leading: IconButton(
             icon: const Icon(
@@ -106,8 +95,36 @@ class SupervisionScreen extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
+                      Navigator.popAndPushNamed(context, '/DeviceQueryResultView');
+                    },
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.0398,
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: SizeConfig.screenWidth * 0.0468),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.padding_outlined,
+                            size: SizeConfig.screenHeight * 0.0398,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: SizeConfig.screenWidth * 0.0156,
+                          ),
+                          const Text(
+                            'Giám Sát Quy Trình',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () {
                       Navigator.popAndPushNamed(
-                          context, '/DeviceQueryResultView');
+                          context, '/supervisionView');
                     },
                   ),
                   SizedBox(
@@ -139,6 +156,7 @@ class SupervisionScreen extends StatelessWidget {
                           context, '/MachineDetailsScreen');
                     },
                   ),
+                  
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.0398,
                   ),
@@ -172,118 +190,23 @@ class SupervisionScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: BlocConsumer<SendConditionCheckBloc, SendConditionCheckState>(
-          listener: (context, state) {
-            if (state is SendConditionCheckDoneState) {}
-          },
-          builder: (context, state) {
-            if (state is SendConditionCheckDoneState) {
-              return SendConditionCheckScreen();
-            }
-            if (state is IntState) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: SizeConfig.screenHeight * 0.1,
-                      ),
-                      const Text('THÔNG TIN GIÁM SÁT',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Constants.mainColor)),
-                      SizedBox(
-                        height: SizeConfig.screenHeight * 0.05,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(20),
-                        width: 400,
-                        height: 300,
-                        decoration: BoxDecoration(border: Border.all()),
-                        padding: const EdgeInsets.only(top: 50, left: 30),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                    width: 250,
-                                    child: Text(
-                                      "$text1",
-                                      style: const TextStyle(fontSize: 15),
-                                    )),
-                                CustomCheckboxState1(text1, machineId)
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                    width: 250,
-                                    child: Text(
-                                      "$text2",
-                                      style: const TextStyle(fontSize: 15),
-                                    )),
-                                CustomCheckboxState2(text2, machineId)
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                    width: 250,
-                                    child: Text(
-                                      "$text3",
-                                      style: const TextStyle(fontSize: 15),
-                                    )),
-                                CustomCheckboxState3(text3, machineId)
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                    width: 250,
-                                    child: Text(
-                                      "$text4",
-                                      style: const TextStyle(fontSize: 15),
-                                    )),
-                                CustomCheckboxState4(text4, machineId)
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      SizedBox(
-                        width: 250,
-                        height: 50,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Constants.mainColor)),
-                            onPressed: () {
-                              // BlocProvider.of<SendConditionCheckBloc>(context)
-                              //     .add(ConfirmSendConditionCheckevent());
-                              Navigator.pushNamed(
-                                  context, '/SendConditionCheckScreen');
-                            },
-                            child: const Text(
-                              'XÁC NHẬN',
-                              style: TextStyle(fontSize: 30),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+        body: Container(
+          padding: const EdgeInsets.only(top: 200),
+          alignment: Alignment.center,
+          child: Column(
+            children: const [
+              Icon(
+                Icons.sentiment_satisfied_alt_rounded,
+                size: 150,
+                color: Constants.mainColor,
+              ),
+              Text(
+                'Dữ liệu đã được gửi lên máy chủ',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
         ));
   }
 }
+//  

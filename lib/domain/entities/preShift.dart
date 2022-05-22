@@ -1,5 +1,5 @@
  
- import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injection_molding_machine_application/domain/entities/login.dart';
 
 import 'configuration.dart';

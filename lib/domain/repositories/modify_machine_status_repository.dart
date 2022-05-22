@@ -1,3 +1,5 @@
+import 'package:injection_molding_machine_application/domain/entities/supervision.dart';
+
 abstract class ModifyStatusMachineRepository {
-  Future<void> requestModifyMachineStatus();
+  Future<void> requestModifyStatusMachine(Supervision supervision);
 }

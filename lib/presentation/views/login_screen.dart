@@ -50,6 +50,64 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           ),
         ),
+        endDrawer: Drawer(
+          backgroundColor: Constants.secondaryColor,
+          child: Column(
+            children: [
+              Container(
+                width: SizeConfig.screenWidth * 0.7421,
+                height: SizeConfig.screenHeight * 0.4659,
+                decoration: const BoxDecoration(
+                    color: Constants.mainColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(30.0))),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: SizeConfig.screenHeight * 0.0664,
+                    ),
+                    Icon(
+                      Icons.account_circle_rounded,
+                      size: SizeConfig.screenHeight * 0.2659,
+                      color: Colors.white,
+                    ),
+                    const Text(
+                      'Người Kiểm Tra:',
+                      style: TextStyle(fontSize:17 , color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.screenWidth * 0.0468,
+                        top: SizeConfig.screenHeight * 0.0797),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.settings_outlined,
+                          size: SizeConfig.screenHeight * 0.0398,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: SizeConfig.screenWidth * 0.0156,
+                        ),
+                        const Text(
+                          'Cài Đặt',
+                          style: TextStyle(color: Colors.white, fontSize: 25),
+                        )
+                      ],
+                    ),
+                  ),
+               
+                ],
+              ),
+            ],
+          ),
+        ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: BlocConsumer<LoginBloc, LoginState>(

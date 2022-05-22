@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:injection_molding_machine_application/domain/entities/supervision.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 import 'constant.dart';
 
 class CustomizedButton extends StatelessWidget {
@@ -14,7 +16,7 @@ class CustomizedButton extends StatelessWidget {
       this.width = 100,
       this.height = 50,
       this.padding = 20,
-      this.radius = 60,
+      this.radius = 30,
       this.bgColor = Constants.mainColor,
       this.fgColor = Colors.white,
       required this.onPressed,
@@ -110,19 +112,32 @@ class TextAnnotation extends StatelessWidget {
   }
 }
 class CustomCheckboxState1 extends StatefulWidget {
+  String text;
+  String machineId;
+  CustomCheckboxState1(this.text, this.machineId);
   @override
-  State<CustomCheckboxState1> createState() => _CustomCheckboxState1State();
+  State<CustomCheckboxState1> createState() => _CustomCheckboxState1State(text, machineId);
 }
 
 class _CustomCheckboxState1State extends State<CustomCheckboxState1> {
+  ConditionCheck conditionCheck = ConditionCheck(checkPass: false, name: 'name');
    bool _checkpassed = false;
-
+   String text;
+   String machineId;
+   _CustomCheckboxState1State(this.text, this.machineId);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
        onTap: (){
          setState(() {
               _checkpassed = !_checkpassed;
+              if(_checkpassed == true){
+              Global.supervision.machineId = machineId;
+              conditionCheck.name = text;
+              conditionCheck.checkPass = _checkpassed;
+              Global.supervision.conditionCheck!.add(conditionCheck);
+              print(Global.supervision);
+              }
          });
       },
         child: Container(
@@ -145,19 +160,32 @@ class _CustomCheckboxState1State extends State<CustomCheckboxState1> {
   }
 }
 class CustomCheckboxState2 extends StatefulWidget {
+  String text;
+  String machineId;
+  CustomCheckboxState2(this.text, this.machineId);
   @override
-  State<CustomCheckboxState2> createState() => _CustomCheckboxState2State();
+  State<CustomCheckboxState2> createState() => _CustomCheckboxState2State(text, machineId);
 }
 
 class _CustomCheckboxState2State extends State<CustomCheckboxState2> {
+  ConditionCheck conditionCheck = ConditionCheck(checkPass: false, name: 'name');
    bool _checkpassed = false;
-
+  String text;
+  String machineId;
+  _CustomCheckboxState2State(this.text, this.machineId);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
        onTap: (){
          setState(() {
              _checkpassed = !_checkpassed;
+            if (_checkpassed == true) {
+              Global.supervision.machineId = machineId;
+              conditionCheck.name = text;
+              conditionCheck.checkPass = _checkpassed;
+              Global.supervision.conditionCheck!.add(conditionCheck);
+              print(Global.supervision);
+            }
          });
       },
         child: Container(
@@ -181,19 +209,32 @@ class _CustomCheckboxState2State extends State<CustomCheckboxState2> {
   }
 }
 class CustomCheckboxState3 extends StatefulWidget {
+   String text;
+   String machineId;
+   CustomCheckboxState3(this.text, this.machineId);
   @override
-  State<CustomCheckboxState3> createState() => _CustomCheckboxState3State();
+  State<CustomCheckboxState3> createState() => _CustomCheckboxState3State(text, machineId);
 }
 
 class _CustomCheckboxState3State extends State<CustomCheckboxState3> {
+  ConditionCheck conditionCheck = ConditionCheck(checkPass: false, name: 'name');
    bool _checkpassed = false;
-
+    String text;
+    String machineId;
+    _CustomCheckboxState3State(this.text, this.machineId);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
        onTap: (){
          setState(() {
               _checkpassed = !_checkpassed;
+             if (_checkpassed == true) {
+              Global.supervision.machineId = machineId;
+             conditionCheck.name = text;
+              conditionCheck.checkPass = _checkpassed;
+              Global.supervision.conditionCheck!.add(conditionCheck);
+              print(Global.supervision);
+            }
          });
       },
         child: Container(
@@ -216,19 +257,33 @@ class _CustomCheckboxState3State extends State<CustomCheckboxState3> {
   }
 }
 class CustomCheckboxState4 extends StatefulWidget {
+  String text;
+  String machineId;
+  CustomCheckboxState4(this.text, this.machineId);
   @override
-  State<CustomCheckboxState4> createState() => _CustomCheckboxState4State();
+  State<CustomCheckboxState4> createState() => _CustomCheckboxState4State(text, machineId);
 }
 
 class _CustomCheckboxState4State extends State<CustomCheckboxState4> {
+  ConditionCheck conditionCheck =
+      ConditionCheck(checkPass: false, name: 'name');
   bool _checkpassed = false;
-
+  String text;
+  String machineId;
+  _CustomCheckboxState4State(this.text, this.machineId);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
          setState(() {
              _checkpassed = !_checkpassed;
+             if (_checkpassed == true) {
+              Global.supervision.machineId = machineId;
+              conditionCheck.name = text;
+              conditionCheck.checkPass = _checkpassed;
+              Global.supervision.conditionCheck!.add(conditionCheck);
+              print(Global.supervision);
+            }
          });
       },
         child: Container(

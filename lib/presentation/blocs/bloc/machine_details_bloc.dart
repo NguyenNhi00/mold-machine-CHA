@@ -98,57 +98,5 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
   }
 }
 
-  // @override
-  // Stream<MachineDetailsState> mapEventToState(MachineEvent event) async* {
-  //   if (event is MachineDetailsEventHubConnected) {
-  //     emit(MachineDetailsStateLoadingRequest(timestamp: event.timestamp));
-  //     event.hubConnection.state == HubConnectionState.disconnected
-  //         ? await event.hubConnection.start()!.onError((error, stackTrace) {
-  //             return MachineDetailsBloc().add(MachineDetailsEventConnectFail(
-  //                 errorPackage: ErrorPackage(
-  //                     errorCode: "error",
-  //                     message: "Ngắt kết nối",
-  //                     detail: "Đã ngắt kết nối tới máy chủ")));
-  //           })
-  //         : await event.hubConnection.stop();
-  //     if (event.hubConnection.state == HubConnectionState.disconnected) {
-  //       // print('Trạng thái hub:' + event.hubConnection.state.toString());
-  //       emit(MachineDetailsStateConnectFail(
-  //           errorPackage: ErrorPackage(
-  //               errorCode: "error",
-  //               message: "Ngắt kết nối",
-  //               detail: "Đã ngắt kết nối tới máy chủ"))) ;
-  //     } else if (event.hubConnection.state == HubConnectionState.connected) {
-  //       // MoldMonitorModel moldMonitorModel = MoldMonitorModel(
-  //       //   alarm: false,
-  //       //   running: false,
-  //       //   maSanPham: "M25",
-  //       //   soLuongKeHoach: 0,
-  //       //   soLuongThucTe: 0,
-  //       // );
-  //       // MoldModel moldModel = const MoldModel(
-  //       //   id: "1234",
-  //       //   standardInjectionCycle: 10,
-  //       //   standardOpenTime: 10,
-  //       //   injectionCycleTolerance: 5,
-  //       //   automatic: true,
-  //       //   productsPerShot: 0,
-  //       // );
-  //       yield MachineDetailsStateConnectSuccessful();
-  //     }
-  //   } else if (event is MachineDetailsEventDataUpDated) {
-  //     // yield MachineDetailsStateDataUpdated(
-  //     //   nodeQueryResult:event.nodeQueryResult,
-  //     //   timestamp: DateTime.now(),
-  //     // );
-  //     emit(MachineDetailsStateDataUpdated(
-  //         nodeQueryResult: event.nodeQueryResult, timestamp: DateTime.now()));
-  //   } else if (event is MachineDetailsEventConnectFail) {
-  //     emit(MachineDetailsStateConnectFail(
-  //         errorPackage: ErrorPackage(
-  //             errorCode: "error",
-  //             message: "Ngắt kết nối",
-  //             detail: "Đã ngắt kết nối tới máy chủ")));
-  //   }
-  // }
+ 
 

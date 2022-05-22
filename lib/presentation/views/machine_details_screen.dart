@@ -1,6 +1,5 @@
 import 'dart:core';
 
-
 import 'package:flutter/material.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/configuration.dart';
@@ -8,7 +7,7 @@ import 'package:injection_molding_machine_application/domain/entities/node_query
 import 'package:injection_molding_machine_application/domain/entities/preShift.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_management_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machines_management_event.dart';
-import 'package:injection_molding_machine_application/presentation/views/check_information.dart';
+import 'package:injection_molding_machine_application/presentation/views/check_information_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/operating_params_reliability.dart';
 import 'package:injection_molding_machine_application/presentation/views/supervision_Screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
@@ -47,7 +46,9 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
     SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('THÔNG SỐ MÁY ÉP',),
+          title: const Text(
+            'THÔNG SỐ MÁY ÉP',
+          ),
           backgroundColor: Constants.mainColor,
           leading: IconButton(
             icon: const Icon(
@@ -83,7 +84,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                     ),
                     const Text(
                       'Người Kiểm Tra: nhi0201',
-                      style: TextStyle(fontSize:17 , color: Colors.white),
+                      style: TextStyle(fontSize: 17, color: Colors.white),
                     ),
                   ],
                 ),
@@ -153,7 +154,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                 preShiftList = state.preShiftList;
                 print('productList: $productList');
                 for (int i = 0; i < preShiftList.length; i++) {
-                  if(preShiftList[i].product!.id == deviceQueryResult.deviceId){
+                  if (preShiftList[i].product!.id ==
+                      deviceQueryResult.deviceId) {
                     preShift = preShiftList[i];
                   }
                 }
@@ -161,7 +163,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                 //   if()
                 // }
                 print('information: $product');
-              } 
+              }
             },
             builder: (context, MachineDetailsState) {
               bool warning = false;
@@ -191,7 +193,11 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenWidth * 0.3121,
                                 height: SizeConfig.screenHeight * 0.07121,
                                 onPressed: () async {
-                                 Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInfomationView()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CheckInfomationView()));
                                   bool disconnectMachine = bool.fromEnvironment(
                                           deviceQueryResult.connected
                                               .toString()) ==
@@ -225,7 +231,11 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenWidth * 0.3121,
                                 height: SizeConfig.screenHeight * 0.07121,
                                 onPressed: () async {
-                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckInfomationView()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CheckInfomationView()));
                                   bool connectMachine = bool.fromEnvironment(
                                           deviceQueryResult.connected
                                               .toString()) ==
@@ -260,9 +270,10 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                           text1: "Mã sản phẩm",
                           text2: "Số lượng kế hoạch",
                           text3: "Số lượng thực tế",
-                          data1:'BX-02', //preShift.product!.id.toString(),
-                          data2:'1200', //preShift.totalQuantity.toString(),
-                          data3:'1100', //deviceQueryResult.tagQueryResults[2].value.toString(),
+                          data1: 'BX-02', //preShift.product!.id.toString(),
+                          data2: '1200', //preShift.totalQuantity.toString(),
+                          data3:
+                              '1100', //deviceQueryResult.tagQueryResults[2].value.toString(),
                         ),
                       ),
                       SizedBox(height: SizeConfig.screenHeight * 0.0256),
@@ -346,10 +357,11 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                   width: SizeConfig.screenHeight * 0.1230,
                                   height: SizeConfig.screenHeight * 0.1230,
                                   decoration: BoxDecoration(
-                                      color: warning? Colors.yellow : Colors.white,
-                                      border:Border.all(),
-                                      shape: BoxShape.circle,
-                                      ),
+                                    color:
+                                        warning ? Colors.yellow : Colors.white,
+                                    border: Border.all(),
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                                 const Text(
                                   "CẢNH BÁO",
@@ -360,12 +372,30 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50,),
-                      ElevatedButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> SupervisionScreen()));
-                      }, child: const Text('GIÁM SÁT')),
-                     const SizedBox(height: 100,),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      SizedBox(
+                        width: 250,
+                        height: 60,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Constants.mainColor)),
+                            onPressed: () {
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> SupervisionScreen(deviceQueryResult.deviceId)));
+                              Navigator.pushNamed(context, '/supervisionView');
+                              Global.machineId = deviceQueryResult.deviceId;
+                            },
+                            child: const Text(
+                              'GIÁM SÁT',
+                              style: TextStyle(fontSize: 30),
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 100,
+                      ),
                     ],
                   ),
                 ),
