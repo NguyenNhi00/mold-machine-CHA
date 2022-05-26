@@ -32,7 +32,7 @@ class MainAppName extends StatelessWidget {
             //   width: SizeConfig.screenWidth * 0.1024,
             // ),
             Image(
-              image: const AssetImage('lib/assets/logobk.jpg'),
+              image: const AssetImage('lib/assets/logo_bachkhoa-nobackgr.png'),
               width: SizeConfig.screenWidth * 0.5006,
             )
           ],

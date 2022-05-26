@@ -6,8 +6,7 @@ class LoginRepositoryImpl implements LoginRepoistory {
   final LoginService _loginService;
   LoginRepositoryImpl(this._loginService);
   @override
-  Future<LoginModel> getToken(String username, String password) {
-    // TODO: implement getToken
-    throw UnimplementedError();
+  Future<LoginModel> getToken(String username, String password) async {
+   return _loginService.getToken(username, password);
   }
 }

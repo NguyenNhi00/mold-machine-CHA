@@ -37,6 +37,7 @@ dependencies:
   ndialog: ^4.1.1
   flutter_bloc: ^8.0.1
   signalr_core: ^1.1.1
+  in_app_notification: ^1.1.1
   # device_preview: ^1.0.0
 dependency_overrides:
   platform: ^3.1.0

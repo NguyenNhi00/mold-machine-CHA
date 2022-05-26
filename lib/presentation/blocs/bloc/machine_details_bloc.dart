@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_notification/in_app_notification.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/mold.dart';
@@ -10,11 +11,14 @@ import 'package:injection_molding_machine_application/presentation/blocs/event/m
 import 'package:injection_molding_machine_application/presentation/blocs/state/machine_details_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 Mold? moldCurrent;
 MoldMonitor? moldMonitor;
 late HubConnection hubConnection;
+ 
+//  NotificationDisconnectServer notificationDisconnectServer = NotificationDisconnectServer();
 
 class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
   MachineDetailsBloc()
@@ -27,10 +31,7 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
         (event, emit) => MachineDetailsStateConnectSuccessful());
     on<MachineDetailsEventConnectFail>((event, emit) =>
         MachineDetailsStateConnectFail(
-            errorPackage: ErrorPackage(
-                errorCode: "error",
-                message: "Ngắt kết nối",
-                detail: "Đã ngắt kết nối tới máy chủ")));
+           ));
   }
   Future<void> onGetDataSignalR(
       MachineEvent event, Emitter<MachineDetailsState> emit) async {
@@ -76,7 +77,7 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
       print(json);
 
       // connect to server
-
+      
       hubConnection = HubConnectionBuilder()
           .withUrl(Constants.signalRUrl)
           .withAutomaticReconnect()
@@ -94,6 +95,7 @@ class MachineDetailsBloc extends Bloc<MachineEvent, MachineDetailsState> {
         print(event.nodeQueryResultModel.deviceQueryResults.length);
       return emit(MachineDetailsStateDataUpdated(
           nodeQueryResultModel: event.nodeQueryResultModel));
+      
     }
   }
 }

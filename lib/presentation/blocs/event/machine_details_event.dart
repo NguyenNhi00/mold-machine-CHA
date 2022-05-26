@@ -4,6 +4,7 @@ import 'package:injection_molding_machine_application/domain/entities/configurat
 import 'package:injection_molding_machine_application/domain/entities/mold.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
 
@@ -27,10 +28,10 @@ class MachineDetailsEventDataUpDated extends MachineEvent {
 }
 
 class MachineDetailsEventConnectFail extends MachineEvent {
-  ErrorPackage errorPackage;
-  MachineDetailsEventConnectFail({required this.errorPackage});
+  NotificationDisconnectServer notificationDisconnectServer;
+  MachineDetailsEventConnectFail(this.notificationDisconnectServer);
   @override
-  List<Object> get props => [errorPackage];
+  List<Object> get props => [notificationDisconnectServer];
 }
 
 class MachineDetailsEvent extends MachineEvent {

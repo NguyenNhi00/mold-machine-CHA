@@ -1,5 +1,4 @@
 
-import 'dart:ffi';
 
 import 'package:injection_molding_machine_application/domain/entities/supervision.dart';
 import 'package:injection_molding_machine_application/domain/repositories/modify_machine_status_repository.dart';

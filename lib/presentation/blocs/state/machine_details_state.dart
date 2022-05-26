@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:injection_molding_machine_application/data/models/error_package.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 
 abstract class MachineDetailsState extends Equatable {}
 
@@ -29,11 +30,10 @@ class MachineDetailsStateConnectSuccessful extends MachineDetailsState {
 }
 
 class MachineDetailsStateConnectFail extends MachineDetailsState {
-  ErrorPackage errorPackage;
 
-  MachineDetailsStateConnectFail({required this.errorPackage});
+  MachineDetailsStateConnectFail();
   @override
-  List<Object> get props => [errorPackage];
+  List<Object> get props => [];
 }
 
 class MachineDetailsStateDataUpdated extends MachineDetailsState {

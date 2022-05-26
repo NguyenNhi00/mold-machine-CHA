@@ -4,9 +4,8 @@ import 'package:injection_molding_machine_application/domain/repositories/login_
 class LoginUseCase {
   final LoginRepoistory _loginRepoistory;
   LoginUseCase(this._loginRepoistory);
-  Future<LoginModel> getToken(
-      String username, String password) async {
-    final machines = await _loginRepoistory.getToken(username, password);
-    return machines;
+  Future<LoginModel> getToken(String username, String password) async {
+    final userData = await _loginRepoistory.getToken(username, password);
+    return userData;
   }
 }

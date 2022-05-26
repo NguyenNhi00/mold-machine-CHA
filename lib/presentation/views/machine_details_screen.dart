@@ -7,11 +7,10 @@ import 'package:injection_molding_machine_application/domain/entities/node_query
 import 'package:injection_molding_machine_application/domain/entities/preShift.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_management_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machines_management_event.dart';
-import 'package:injection_molding_machine_application/presentation/views/check_information_screen.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/operating_params_reliability.dart';
-import 'package:injection_molding_machine_application/presentation/views/supervision_Screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
 import 'package:injection_molding_machine_application/presentation/views/models/mold_params_reliability.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
 import '../widgets/widgets.dart';
 import 'package:signalr_core/signalr_core.dart';
@@ -166,6 +165,11 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
               }
             },
             builder: (context, MachineDetailsState) {
+              String stopMachine = 'Tạm Dừng';
+              String startMachine = 'Tiếp Tục';
+              ConfirmDialog confirmDialog1 = ConfirmDialog(stopMachine,context);
+              ConfirmDialog confirmDialog2 =
+                  ConfirmDialog(startMachine, context);
               bool warning = false;
               return SingleChildScrollView(
                 child: Center(
@@ -192,12 +196,8 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 fontSize: 20,
                                 width: SizeConfig.screenWidth * 0.3121,
                                 height: SizeConfig.screenHeight * 0.07121,
-                                onPressed: () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CheckInfomationView()));
+                                onPressed: () async {    
+                                  confirmDialog1.showMyAlertDialog(context);  
                                   bool disconnectMachine = bool.fromEnvironment(
                                           deviceQueryResult.connected
                                               .toString()) ==
@@ -231,11 +231,7 @@ class _MachineDetailsScreenState extends State<MachineDetailsScreen> {
                                 width: SizeConfig.screenWidth * 0.3121,
                                 height: SizeConfig.screenHeight * 0.07121,
                                 onPressed: () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CheckInfomationView()));
+                                 confirmDialog2.showMyAlertDialog(context);
                                   bool connectMachine = bool.fromEnvironment(
                                           deviceQueryResult.connected
                                               .toString()) ==

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_notification/in_app_notification.dart';
 import 'package:injection_molding_machine_application/data/models/node_query_results_model.dart';
 import 'package:injection_molding_machine_application/domain/entities/node_query_result.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/bloc/machine_details_bloc.dart';
 import 'package:injection_molding_machine_application/presentation/blocs/state/machine_details_state.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/global.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/widgets.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 import 'machine_details_screen.dart';
@@ -141,8 +144,16 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
         ),
         body: BlocConsumer<MachineDetailsBloc, MachineDetailsState>(
             listener: (context, machineDetailsState) async {
+            NotificationDisconnectServer notificationDisconnectServer = NotificationDisconnectServer(context);
           if (machineDetailsState is MachineDetailsStateConnectSuccessful) {
-          } else if (machineDetailsState is MachineDetailsStateDataUpdated) {
+          } else if(machineDetailsState is MachineDetailsStateConnectFail){
+            return notificationDisconnectServer.showMyAlertDialog(context);
+          }
+          else if (machineDetailsState is MachineDetailsStateDataUpdated) {
+            InAppNotification.show(
+              child: NotificationBody(),
+              context: context
+              );
             nodeQueryResult = machineDetailsState.nodeQueryResultModel;
             for (int i = 0;
                 i < nodeQueryResult.deviceQueryResults.length;
@@ -162,6 +173,11 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
             }
           } else if (machineDetailsState is MachineDetailsStateInit) {}
         }, builder: (context, machineDetailState) {
+          
+          if(machineDetailState is MachineDetailsStateConnectFail){
+            NotificationDisconnectServer notificationDisconnectServer = NotificationDisconnectServer(context);
+             notificationDisconnectServer.showMyAlertDialog(context);
+          }
           if (machineDetailState is MachineDetailsStateDataUpdated) {
             return TabBarView(
               children: [
@@ -304,12 +320,14 @@ class _DeviceQueryResultViewState extends State<DeviceQueryResultView> {
             );
           } else {
             return Center(
-              child: Column(
-                children: const [
-                  SizedBox(height: 200,),
-                  Icon(Icons.touch_app_outlined ,size: 150, color: Constants.mainColor,),
-                  SizedBox(height: 20,),
-                  Text('Đăng nhập thành công', style: TextStyle(fontSize: 25, color: Constants.mainColor),)
+              child:
+              Column(
+                children:  const [
+                   SizedBox(height: 200,),
+                   Icon(Icons.touch_app_outlined ,size: 150, color: Constants.mainColor,),
+                   SizedBox(height: 20,),
+                   Text('Đăng nhập thành công', style: TextStyle(fontSize: 25, color: Constants.mainColor),
+                  ),
                 ],
               ));
           }

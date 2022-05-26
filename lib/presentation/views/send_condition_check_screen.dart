@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/widgets.dart';
 
 class SendConditionCheckScreen extends StatelessWidget {
   @override
@@ -194,16 +195,30 @@ class SendConditionCheckScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 200),
           alignment: Alignment.center,
           child: Column(
-            children: const [
-              Icon(
-                Icons.sentiment_satisfied_alt_rounded,
+            children: [
+              const Icon(
+                Icons.cloud_done_outlined,
                 size: 150,
                 color: Constants.mainColor,
               ),
-              Text(
+              const Text(
                 'Dữ liệu đã được gửi lên máy chủ',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              )
+              ),
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.0702,
+              ),
+              CustomizedButton(
+                text: "TRỞ LẠI",
+                fontSize: 20,
+                width: SizeConfig.screenWidth * 0.621,
+                padding: 80,
+                height: SizeConfig.screenHeight * 0.07121,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/DeviceQueryResultView');
+                },
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.0028),
             ],
           ),
         ));

@@ -4,6 +4,7 @@ import 'package:injection_molding_machine_application/presentation/blocs/bloc/se
 import 'package:injection_molding_machine_application/presentation/blocs/state/send_condition_check_state.dart';
 import 'package:injection_molding_machine_application/presentation/views/send_condition_check_screen.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/constant.dart';
+import 'package:injection_molding_machine_application/presentation/widgets/dialog.dart';
 import 'package:injection_molding_machine_application/presentation/widgets/widgets.dart';
 
 class SupervisionScreen extends StatelessWidget {
@@ -177,6 +178,8 @@ class SupervisionScreen extends StatelessWidget {
             if (state is SendConditionCheckDoneState) {}
           },
           builder: (context, state) {
+            ConfirmDialogCondition confirmDialogCondition =
+                ConfirmDialogCondition('Xác Nhận', context);
             if (state is SendConditionCheckDoneState) {
               return SendConditionCheckScreen();
             }
@@ -208,7 +211,7 @@ class SupervisionScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                    width: 250,
+                                    width: 200,
                                     child: Text(
                                       "$text1",
                                       style: const TextStyle(fontSize: 15),
@@ -219,7 +222,7 @@ class SupervisionScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                    width: 250,
+                                    width: 200,
                                     child: Text(
                                       "$text2",
                                       style: const TextStyle(fontSize: 15),
@@ -230,7 +233,7 @@ class SupervisionScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                    width: 250,
+                                    width: 200,
                                     child: Text(
                                       "$text3",
                                       style: const TextStyle(fontSize: 15),
@@ -241,7 +244,7 @@ class SupervisionScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                    width: 250,
+                                    width: 200,
                                     child: Text(
                                       "$text4",
                                       style: const TextStyle(fontSize: 15),
@@ -264,10 +267,9 @@ class SupervisionScreen extends StatelessWidget {
                                     MaterialStateProperty.all<Color>(
                                         Constants.mainColor)),
                             onPressed: () {
+                              confirmDialogCondition.showMyAlertDialog(context);
                               // BlocProvider.of<SendConditionCheckBloc>(context)
                               //     .add(ConfirmSendConditionCheckevent());
-                              Navigator.pushNamed(
-                                  context, '/SendConditionCheckScreen');
                             },
                             child: const Text(
                               'XÁC NHẬN',
